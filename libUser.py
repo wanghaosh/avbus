@@ -61,12 +61,15 @@ class CUser:
 		#{
 			item = response['Item']
 			self.m_jsProfile['point'] = item['point']
+			print 'load from dynamodb: ' + json.dumps(self.m_jsProfile, ensure_ascii=False)
 		#}
 		else:
 		#{
 			# new user
 			table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_nNewUserPoint})
 			self.m_jsProfile['point'] = self.m_nNewUserPoint
+
+			print 'new user dynamodb: ' + json.dumps(self.m_jsProfile, ensure_ascii=False)
 		#}
 
         #

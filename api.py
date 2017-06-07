@@ -31,6 +31,7 @@ from IGetActorList import _IGetActorList
 from IGetActorProgramList import _IGetActorProgramList
 from IGetNo import _IGetNo
 from IGetYearsProgramList import _IGetYearsProgramList
+from ISearch import _ISearch
 
 ################################
 from flask import Flask
@@ -116,16 +117,16 @@ def IGetYearsProgramList(sYear):
 	nPageSize = int(getParam(request, 'pagesize', '10'))
 	return _IGetYearsProgramList(sToken, int(sYear), nPageIndex, nPageSize, g_log)
 #}
-#
-# @app.route('/api/search', methods=['POST'])
-# def ISearch():
-# #{
-# 	sToken = getParam(request, 'token', None)
-# 	sActor = getParam(request, 'actor', None)
-# 	sProgramName = getParam(request, 'program', None)
-#
-# 	return _ISearch(sToken, sActor, sProgramName)
-# #}
+
+@app.route('/api/search', methods=['POST'])
+def ISearch():
+#{
+	sToken = getParam(request, 'token', None)
+	sActor = getParam(request, 'actor', None)
+	sProgramName = getParam(request, 'program', None)
+
+	return _ISearch(sToken, sActor, sProgramName)
+#}
 
 #-------------------------------------------------------#
 if __name__ == '__main__':

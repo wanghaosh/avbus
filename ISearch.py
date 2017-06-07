@@ -26,7 +26,7 @@ import urllib2
 
 from libMemC import CMemCached
 from libLog import CLog
-
+import boto3
 # from libUser import CUser
 
 def getFromMemcached(mem, sKey):
@@ -118,12 +118,11 @@ def getFromS3():
 	return HttpGet('https://s3-ap-southeast-1.amazonaws.com/avbus-data/actorlist.json')
 #}
 
-def _ISearch(sKeyword, log):
+def _ISearch(sActor, sProgramName, log):
 	"""
 	interface: get actor list(full)
 	"""
 #{
-	import boto3
 	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-h5ip3yilaxh457mgkbhhyehzre.ap-southeast-1.cloudsearch.amazonaws.com')
 	res = csd.search(query=u'柳田弥生', size=10)
 

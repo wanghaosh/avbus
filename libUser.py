@@ -89,7 +89,7 @@ class CUser:
 			if bFound is False:
 			#{
 				self.m_jsProfile['point'] = self.m_nNewUserPoint
-				sSql = 'insert into users("uid", "point") values ("' + self.m_jsProfile['uid'] + '", %d)'%(self.m_nNewUserPoint)
+				sSql = 'insert into users(uid, point) values ("' + self.m_jsProfile['uid'] + '", %d)'%(self.m_nNewUserPoint)
 				print sSql
 				cur.execute(sSql)
 			#}

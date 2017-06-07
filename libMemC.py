@@ -22,7 +22,7 @@ class CMemCached:
 #{
   def __init__(self, sEndPoint = None):
   #{
-    sEndPoint = 'avbus.b7enf8.cfg.apse1.cache.amazonaws.com:11211'
+    sEndPoint = 'avbus.b7enf8.0001.apse1.cache.amazonaws.com:11211'
     # if sEndPoint is None:
     # #{
     #   sEndPoint = CSetting.aryMemcachedCluster[0] + ':11211'

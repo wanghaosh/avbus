@@ -41,13 +41,13 @@ def getFromMemcached(mem, sKey):
 	return sRet
 #}
 
-def getFromRDS():
+def getFromRDS(nPageIndex, nPageSize):
 #{
 	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
 	cur = conn.cursor()
 	try:
 	# {
-		sSql = 'select actor,count(*) from programs group by actor'
+		sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
 		cur.execute(sSql)
 		res = cur.fetchall()
 
@@ -118,17 +118,16 @@ def getFromS3():
 	return HttpGet('https://s3-ap-southeast-1.amazonaws.com/avbus-data/actorlist.json')
 #}
 
-def _IGetActorList(log):
+def _IGetActorList(nPageIndex, nPageSize, log):
 	"""
 	interface: get actor list(full)
 	"""
 #{
 	mem = CMemCached()
-	sKey = 'api_getactorlist'
+	sKey = 'api_getactorlist_%d_%d'%(nPageIndex, nPageSize)
 	sKey = sKey.encode('utf-8')
 
 	sRet = getFromMemcached(mem, sKey)
-        #sRet = None
 	if sRet:
 	#{
 		jsRet = json.loads(sRet)
@@ -138,19 +137,19 @@ def _IGetActorList(log):
 		return json.dumps(jsRet, ensure_ascii=False)
 	#}
 
-	sRet = getFromS3()
-	if sRet:
-	#{
-		mem.Set(sKey, sRet, 3600 * 24)
+	# sRet = getFromS3()
+	# if sRet:
+	# #{
+	# 	mem.Set(sKey, sRet, 3600 * 24)
+    #
+	# 	jsRet = json.loads(sRet)
+	# 	jsRet['mode'] = 's3'
+	# 	log.Info('getactorlist|s3')
+    #
+	# 	return json.dumps(jsRet, ensure_ascii=False)
+	# #}
 
-		jsRet = json.loads(sRet)
-		jsRet['mode'] = 's3'
-		log.Info('getactorlist|s3')
-
-		return json.dumps(jsRet, ensure_ascii=False)
-	#}
-
-	sRet = getFromRDS()
+	sRet = getFromRDS(nPageIndex, nPageSize)
 	if sRet:
 	#{
 		mem.Set(sKey, sRet, 3600 * 24)

@@ -55,7 +55,6 @@ def getFromDynamoDB():
 		"result": "+OK",
 		"programs": items
 	}
-        print jsRet
 	sRet = json.dumps(jsRet, ensure_ascii=False)
 	#sRet = '-'
 	return sRet
@@ -66,7 +65,63 @@ def getFromDynamoDB():
 	# # }
 #}
 
-def _IGetYearsProgramList(sToken, sYear, log):
+def getFromRDS(nYear, nPageIndex, nPageSize):
+#{
+	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()
+	try:
+	# {
+		sSql = 'select count(*) from programs where releaseYear=%d'%(nYear)
+		cur.execute(sSql)
+		res = cur.fetchall()
+		nTotalCount = 0
+		for r in res:
+		#{
+			nTotalCount = r[0]
+			break
+		#}
+		sSql = 'select id, actor, name from programs where releaseYear=%d limit %d,%d'%(nYear, nPageIndex * nPageSize, nPageSize)
+		cur.execute(sSql)
+		res = cur.fetchall()
+
+		aryRecs = []
+		for r in res:
+		# {
+			rec = {
+				"id": r[0],
+				"actor": r[1],
+				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/" + r[1] + ".jpg"
+			}
+			aryRecs.append(rec)
+		# }
+
+		cur.close()
+		conn.close()
+
+		jsRet = {
+			"result": "+OK",
+			"year": nYear,
+			"totalcount": nTotalCount,
+			"pageindex": nPageIndex,
+			"pagesize": nPageSize,
+			"programs": aryRecs,
+			"mode": "db"
+		}
+		sRet = json.dumps(jsRet, ensure_ascii=False)
+		return sRet
+
+		# return aryRecs
+	# }
+	except:
+	# {
+		cur.close()
+		conn.close()
+
+		return None
+	# }
+#}
+
+def _IGetYearsProgramList(sToken, nYear, nPageIndex, nPageSize, log):
 	"""
 	interface
 	"""
@@ -97,7 +152,16 @@ def _IGetYearsProgramList(sToken, sYear, log):
 	# 	return json.dumps(jsRet, ensure_ascii=False)
 	# #}
 
-	sRet = getFromDynamoDB()
+	# sRet = getFromDynamoDB()
+	# if sRet:
+	# #{
+	# 	# mem.Set(sKey, sRet, 3600 * 24)
+    #
+	# 	log.Info('_IGetYearsProgramList|db')
+	# 	return sRet
+	# #}
+
+	sRet = getFromRDS(nYear, nPageIndex, nPageSize)
 	if sRet:
 	#{
 		# mem.Set(sKey, sRet, 3600 * 24)
@@ -105,7 +169,6 @@ def _IGetYearsProgramList(sToken, sYear, log):
 		log.Info('_IGetYearsProgramList|db')
 		return sRet
 	#}
-
 	return '{"result": "-ERR", "msg": "Not Found Data."}'
 #}
 

@@ -76,7 +76,9 @@ def IGetActorList():
 	interface: get actor list(full)
 	"""
 #{
-	return _IGetActorList(g_log)
+	nPageIndex = int(getParam(request, 'pageindex', '0'))
+	nPageSize = int(getParam(request, 'pagesize', '10'))
+	return _IGetActorList(nPageIndex, nPageSize, g_log)
 #}
 
 @app.route('/api/getactorprogramlist', methods=['POST'])
@@ -110,8 +112,11 @@ def IGetNo():
 def IGetYearsProgramList(sYear):
 #{
 	sToken = getParam(request, 'token', None)
-	return _IGetYearsProgramList(sToken, sYear, g_log)
+	nPageIndex = int(getParam(request, 'pageindex', '0'))
+	nPageSize = int(getParam(request, 'pagesize', '10'))
+	return _IGetYearsProgramList(sToken, sYear, nPageIndex, nPageSize, g_log)
 #}
+
 
 #-------------------------------------------------------#
 if __name__ == '__main__':

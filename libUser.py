@@ -92,6 +92,7 @@ class CUser:
 				sSql = 'insert into users(uid, point) values ("' + self.m_jsProfile['uid'] + '", %d)'%(self.m_nNewUserPoint)
 				print sSql
 				cur.execute(sSql)
+				conn.commit()
 			#}
 			cur.close()
 			conn.close()

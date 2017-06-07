@@ -24,6 +24,7 @@ from gevent import monkey
 # from libMemC import CMemCached
 from libLog import CLog
 import boto3
+import mysql.connector
 
 ################################
 # from flask import Flask
@@ -53,100 +54,70 @@ class CUser:
 
 	def LoadProfile(self):
 	#{
-		# s3 = boto3.client('s3')
-		# sKey = 'users/' + self.m_jsProfile['uid']
-		# try:
+		# db = boto3.resource('dynamodb')
+		# table = db.Table('avbus_users')
+		# response = table.get_item(Key={'uid': self.m_jsProfile['uid']})
+		# if response.has_key('Item'):
 		# #{
-		# 	response = s3.get_object(Bucket=self.m_sBucket, Key=sKey)
-		# 	rs = response['Body']
-        #
-		# 	sData = rs.read()
-		# 	self.m_jsProfile = json.loads(sData)
+		# 	item = response['Item']
+		# 	self.m_jsProfile['point'] = item['point']
 		# #}
-		# except:
+		# else:
 		# #{
-		# 	print 'Not Found User Profile'
-		# #}
-
-
-		# cluster = Cluster(['172.31.7.146'], load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='datacenter1'))
-		# conn = cluster.connect()
-		# try:
-		# #{
-		# 	conn.execute('use avbus')
-		# 	sCql = "select uid, point from users where uid='" + self.m_jsProfile['uid'] + "'"
-		# 	datas = conn.execute(sCql)
-		# 	if len(datas) > 0:
-		# 	#{
-		# 		for data in datas:
-		# 		#{
-		# 			self.m_jsProfile['point'] = data.point
-		# 			break
-		# 		#}
-		# 	#}
-		# 	else:
-		# 	#{
-		# 		# new user
-		# 		sCql = "insert into users (uid, point) values ('" + self.m_jsProfile['uid'] + "', %d)"%(self.m_nNewUserPoint)
-		# 		self.m_conn.execute(sCql)
-		# 		self.m_jsProfile['point'] = nNewUserPoint
-		# 	#}
-		# 	cluster.shutdown()
-		# #}
-		# except:
-		# #{
-		# 	print 'Except: LoadProfile[' + str(self.m_jsProfile) + ']'
-		# #}
-		# finally:
-		# #{
-		# 	cluster.shutdown()
+		# 	# new user
+		# 	table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_nNewUserPoint})
+		# 	self.m_jsProfile['point'] = self.m_nNewUserPoint
 		# #}
 
-		db = boto3.resource('dynamodb')
-		table = db.Table('avbus_users')
-		response = table.get_item(Key={'uid': self.m_jsProfile['uid']})
-		if response.has_key('Item'):
-		#{
-			item = response['Item']
-			self.m_jsProfile['point'] = item['point']
-		#}
-		else:
-		#{
-			# new user
-			table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_nNewUserPoint})
-			self.m_jsProfile['point'] = self.m_nNewUserPoint
-		#}
+
+		conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+		cur = conn.cursor()
+		try:
+		# {
+			sSql = 'select uid, point from users'
+			cur.execute(sSql)
+			res = cur.fetchall()
+
+			for r in res:
+			# {
+				self.m_jsProfile['point'] = r[1]
+				break
+			# }
+
+			cur.close()
+			conn.close()
+
+		# }
+		except:
+		# {
+			cur.close()
+			conn.close()
+		# }
 	#}
 
 	def SaveProfile(self):
 	#{
-		# s3 = boto3.client('s3')
-		# sKey = 'users/' + self.m_jsProfile['uid']
-		# s3.put_object(Bucket=self.m_sBucket, Key=sKey, Body=json.dumps(self.m_jsProfile), ACL='public-read', ContentType='text/html')
+		# db = boto3.resource('dynamodb')
+		# table = db.Table('avbus_users')
+        #
+		# table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_jsProfile['point']})
 
 
-		# cluster = Cluster(['172.31.7.146'], load_balancing_policy=DCAwareRoundRobinPolicy(local_dc='datacenter1'))
-		# conn = cluster.connect()
-		# try:
-		# #{
-		# 	conn.execute('use avbus')
-		# 	sCql = "insert into users (uid, point) values ('" + self.m_jsProfile['uid'] + "', %d)"%(self.m_jsProfile['point'])
-		# 	conn.execute(sCql)
-		# #}
-		# except:
-		# #{
-		# 	print 'Except: SaveProfile[' + str(self.m_jsProfile) + ']'
-		# #}
-		# finally:
-		# #{
-		# 	cluster.shutdown()
-		# #}
+		conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+		cur = conn.cursor()
+		try:
+		# {
+			sSql = 'update users set point=%d'%(self.m_jsProfile['point']) + ' where uid="' + self.m_jsProfile['uid'] + '"'
+			cur.execute(sSql)
 
-
-		db = boto3.resource('dynamodb')
-		table = db.Table('avbus_users')
-
-		table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_jsProfile['point']})
+			cur.close()
+			conn.close()
+		# }
+		except:
+		# {
+			cur.close()
+			conn.close()
+		# }
 	#}
 
 	def GetPoint(self):

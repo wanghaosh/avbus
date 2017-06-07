@@ -114,7 +114,7 @@ def IGetYearsProgramList(sYear):
 	sToken = getParam(request, 'token', None)
 	nPageIndex = int(getParam(request, 'pageindex', '0'))
 	nPageSize = int(getParam(request, 'pagesize', '10'))
-	return _IGetYearsProgramList(sToken, sYear, nPageIndex, nPageSize, g_log)
+	return _IGetYearsProgramList(sToken, int(sYear), nPageIndex, nPageSize, g_log)
 #}
 
 

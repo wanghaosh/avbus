@@ -41,7 +41,7 @@ def _ISearch(sActor, sProgramName, log):
 		res = csd.search(query=sProgramName, size=10)
 		for hit in res['hits']['hit']:
 		#{
-			print hit['fields']['actor'] + ' : ' + hit['fields']['name']
+			print hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 		#}
 	#}
 	if sActor:
@@ -49,7 +49,7 @@ def _ISearch(sActor, sProgramName, log):
 		res = csd.search(query=sActor, size=10)
 		for hit in res['hits']['hit']:
 		# {
-			print hit['fields']['actor'] + ' : ' + hit['fields']['name']
+			print hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 		# }
 	#}
 

@@ -29,136 +29,28 @@ from libLog import CLog
 import boto3
 # from libUser import CUser
 
-def getFromMemcached(mem, sKey):
-#{
-	# mem = CMemCached()
-	# sKey = 'api_getactorlist'
-	# sKey = sKey.encode('utf-8')
-	sRet = mem.Get(sKey)
-
-	if sRet == '' or sRet is None:
-		return None
-	return sRet
-#}
-
-def getFromRDS(nPageIndex, nPageSize):
-#{
-	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
-	cur = conn.cursor()
-	try:
-	# {
-		sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-		cur.execute(sSql)
-		res = cur.fetchall()
-
-		aryRecs = []
-		for r in res:
-		# {
-			rec = {
-				"actor": r[0],
-				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/" + r[0] + ".jpg",
-				"programcount": r[1]
-			}
-			aryRecs.append(rec)
-		# }
-
-		cur.close()
-		conn.close()
-
-		jsRet = {
-			"result": "+OK",
-			"actorcount": len(aryRecs),
-			"actors": aryRecs,
-			"mode": "db"
-		}
-		sRet = json.dumps(jsRet, ensure_ascii=False)
-		return sRet
-
-		# return aryRecs
-	# }
-	except:
-	# {
-		cur.close()
-		conn.close()
-
-		return None
-	# }
-	# sRet = '{"result":"+OK", "actorcount":' + len(aryRecs) + ', "actors":' + str(aryRecs) + '}'
-
-	# print 'size: ' + str(len(sRet))
-	# sRet = zlib.compress(sRet)
-	# print 'z size: ' + str(len(sRet))
-	# mem.Set(sKey, sRet, 3600 * 24)
-
-#}
-
-def HttpGet(sUri):
-# {
-	try:
-	# {
-		resp = urllib2.urlopen(sUri)
-
-		if resp.getcode() != 200:
-		# {
-			print resp.getcode()
-			return None
-		# }
-		return resp.read()
-	# }
-	except:
-	# {
-		info = sys.exc_info()
-		print info
-		return None
-	# }
-# }
-
-def getFromS3():
-#{
-	return HttpGet('https://s3-ap-southeast-1.amazonaws.com/avbus-data/actorlist.json')
-#}
-
 def _ISearch(sActor, sProgramName, log):
 	"""
 	interface: get actor list(full)
 	"""
 #{
 	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-h5ip3yilaxh457mgkbhhyehzre.ap-southeast-1.cloudsearch.amazonaws.com')
-	res = csd.search(query=u'柳田弥生', size=10)
 
-	mem = CMemCached()
-	sKey = 'api_getactorlist_%d_%d'%(nPageIndex, nPageSize)
-	sKey = sKey.encode('utf-8')
-
-	sRet = getFromMemcached(mem, sKey)
-	if sRet:
+	if sProgramName:
 	#{
-		jsRet = json.loads(sRet)
-		jsRet['mode'] = 'mem'
-
-		log.Info('getactorlist|mem')
-		return json.dumps(jsRet, ensure_ascii=False)
+		res = csd.search(query=sProgramName, size=10)
+		for hit in res['hits']['hit']:
+		#{
+			print hit
+		#}
 	#}
-
-	# sRet = getFromS3()
-	# if sRet:
-	# #{
-	# 	mem.Set(sKey, sRet, 3600 * 24)
-    #
-	# 	jsRet = json.loads(sRet)
-	# 	jsRet['mode'] = 's3'
-	# 	log.Info('getactorlist|s3')
-    #
-	# 	return json.dumps(jsRet, ensure_ascii=False)
-	# #}
-
-	sRet = getFromRDS(nPageIndex, nPageSize)
-	if sRet:
+	if sActor:
 	#{
-		mem.Set(sKey, sRet, 3600 * 24)
-
-		log.Info('getactorlist|db')
-		return sRet
+		res = csd.search(query=sActor, size=10)
+		for hit in res['hits']['hit']:
+		# {
+			print hit
+		# }
 	#}
 
 	return '{"result": "-ERR", "msg": "Not Found Data."}'
@@ -182,3 +74,9 @@ def _ISearch(sActor, sProgramName, log):
 # 	sRet = decryptor.decrypt(sData)
 # 	return sRet.rstrip('\0')
 # #}
+
+#-------------------------------------------------------#
+if __name__ == '__main__':
+#{
+	print _ISearch(u'鲇川奈绪', u'美形な女子校生', None)
+#}

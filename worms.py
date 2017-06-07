@@ -265,6 +265,7 @@ def ParseDetailPage():
 
 def ParseDetailPage_One(sActor, sData, msCur, table):
 #{
+	global g_sSearchData
 	global g_nCount
 	aryTmp = sData.split("<input type=hidden value='欢迎访问99番号网：www.99fanhao.com'>")
 

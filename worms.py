@@ -31,7 +31,7 @@ from libS3 import CS3Bucket
 # import boto
 import boto3
 # import botocore
-
+import traceback
 # g_log = CLog()
 # g_log.Init('/logs/cdnChecker.log', '1')
 
@@ -240,6 +240,12 @@ def ParseDetailPage():
 		except:
 		#{
 			print 'Except <------------>'
+
+
+			info = sys.exc_info()
+			print info
+			print str(traceback.format_exc())
+
 			# conn.commit()
 		#}
 	#}

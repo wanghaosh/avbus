@@ -58,7 +58,7 @@ def _IGetActorProgramList(sActor, log):
 		cur = conn.cursor()
 		#try:
 		#{
-		sSql = 'select idprograms, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '"'
+		sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '"'
 		cur.execute(sSql)
 		res = cur.fetchall()
 

@@ -232,7 +232,7 @@ def ParseDetailPage():
 		try:
 		#{
 			# ParseDetailPage_One(sActor, sData, cur, table)
-			ParseDetailPage_One(sActor, sData)
+			ParseDetailPage_One(sActor, sData, None, None)
 			# conn.commit()
 
 			print g_nCount
@@ -328,12 +328,18 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 			nMonth = int(aryRelease[1])
 			nDay = int(aryRelease[2])
 		# }
-		sSql = 'insert into programs(number, actor, name, dur, releaseYear, releaseMonth, releaseDay, company) values("' + sNo + '", "' + sActor + '", "' + sProgramName + '", %d, %d, %d, %d, ' % (nDur, nYear, nMonth, nDay) + '"' + sCompany + '")'
-		print sSql
-		msCur.execute(sSql)
+		if msCur:
+		#{
+			sSql = 'insert into programs(number, actor, name, dur, releaseYear, releaseMonth, releaseDay, company) values("' + sNo + '", "' + sActor + '", "' + sProgramName + '", %d, %d, %d, %d, ' % (nDur, nYear, nMonth, nDay) + '"' + sCompany + '")'
+			print sSql
+			msCur.execute(sSql)
+		#}
 
 		# save to dynamodb
-		putItem2DynamoDB(sNo, sActor, sProgramName, sDur, nYear, nMonth, nDay, sCompany, table)
+		if table:
+		#{
+			putItem2DynamoDB(sNo, sActor, sProgramName, sDur, nYear, nMonth, nDay, sCompany, table)
+		#}
 
 		# search data
 		g_sSearchData += '{"type": "add",\n'

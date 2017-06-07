@@ -120,6 +120,7 @@ class CUser:
 		# {
 			sSql = 'update users set point=%d'%(self.m_jsProfile['point']) + ' where uid="' + self.m_jsProfile['uid'] + '"'
 			cur.execute(sSql)
+			conn.commit()
 
 			cur.close()
 			conn.close()

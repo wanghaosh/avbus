@@ -90,6 +90,7 @@ class CUser:
 		# }
 		except:
 		# {
+			print 'load Profile failed'
 			cur.close()
 			conn.close()
 		# }
@@ -128,7 +129,10 @@ class CUser:
 	def UsePoint(self, nPoint):
 	#{
 		if self.m_jsProfile['point'] < nPoint:
+		#{
+			print 'point: %d'%(self.m_jsProfile['point'])
 			return False
+		#}
 		self.m_jsProfile['point'] -= nPoint
 		self.SaveProfile()
 	#}

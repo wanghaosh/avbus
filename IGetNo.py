@@ -87,7 +87,7 @@ def _IGetNo(sToken, sID, log):
 		cur = conn.cursor()
 		#try:
 		#{
-		sSql = 'select number from programs where idprograms=' + sID
+		sSql = 'select number from programs where id=' + sID
 		cur.execute(sSql)
 		res = cur.fetchall()
 

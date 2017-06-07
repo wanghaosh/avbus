@@ -175,26 +175,34 @@ def DownloadPic(sActorName, sPicURI):
 	os.system(sCmd)
 #}
 
+g_sSearchData = ''
+g_nCount = 0
+
 def ParseDetailPage():
 #{
+	global g_sSearchData
+	global  g_nCount
+
+	g_sSearchData = '[\n'
+
 	# s3 = boto3.client('s3')
 
 	# dynamodb
-	db = boto3.resource('dynamodb')
-	table = db.Table('avbus_programs')
+	# db = boto3.resource('dynamodb')
+	# table = db.Table('avbus_programs')
 
 	# mysql
-	conn = mysql.connector.connect(
-		user='avbus555',
-		password='avbus555',
-		host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com',
-		database='avbus'
-	)
-
-	cur = conn.cursor()
+	# conn = mysql.connector.connect(
+	# 	user='avbus555',
+	# 	password='avbus555',
+	# 	host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com',
+	# 	database='avbus'
+	# )
+    #
+	# cur = conn.cursor()
 
 	# fOut = open('numberdata.txt', 'w')
-	nCount = 0
+	g_nCount = 0
 	#<input type=hidden value=
 	# sDir = '/Users/wanghao/OneDrive/wh/项目/some/Line55/detail/'
 	sDir = '/app/Line55/detail/'
@@ -223,27 +231,35 @@ def ParseDetailPage():
 
 		try:
 		#{
-			nCount += ParseDetailPage_One(sActor, sData, cur, table)
-			conn.commit()
+			# ParseDetailPage_One(sActor, sData, cur, table)
+			ParseDetailPage_One(sActor, sData)
+			# conn.commit()
 
-			print nCount
+			print g_nCount
 		#}
 		except:
 		#{
 			print 'Except <------------>'
-			conn.commit()
+			# conn.commit()
 		#}
 	#}
-	conn.commit()
-
-	cur.close()
-	conn.close()
+	# conn.commit()
+    #
+	# cur.close()
+	# conn.close()
 
 	# fOut.close()
+
+	# cloudsearch
+	g_sSearchData += ']'
+	fSearch = open('/app/cs.json', 'w')
+	fSearch.write(g_sSearchData)
+	fSearch.close()
 #}
 
 def ParseDetailPage_One(sActor, sData, msCur, table):
 #{
+	global g_nCount
 	aryTmp = sData.split("<input type=hidden value='欢迎访问99番号网：www.99fanhao.com'>")
 
 	# parse pic
@@ -260,7 +276,7 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 
 	# line
 	aryLines = sTable.split('</tr>')
-	nCount = 0
+
 	for sLine in aryLines:
 	# {
 		if sLine.find('</th>') > 0:
@@ -287,8 +303,8 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 		sRelease = aryFields[3].replace('<td style="text-align: left">', '')
 		sCompany = aryFields[4].replace('<td style="text-align: left">', '')
 
-		nCount += 1
-		print '    ->[%d] ' % (nCount) + sNo + '|' + sProgramName + '|%d' % (nDur) + '|' + sRelease + '|' + sCompany
+		g_nCount += 1
+		print '    ->[%d] ' % (g_nCount) + sNo + '|' + sProgramName + '|%d' % (nDur) + '|' + sRelease + '|' + sCompany
 
 		jsData = {
 			'no': sNo,
@@ -318,8 +334,13 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 
 		# save to dynamodb
 		putItem2DynamoDB(sNo, sActor, sProgramName, sDur, nYear, nMonth, nDay, sCompany, table)
+
+		# search data
+		g_sSearchData += '{"type": "add",\n'
+		g_sSearchData += '"id": "av%07d",\n'
+		g_sSearchData += '"fields": {"no":"' + sNo + '", "actor":"' + sActor + '", "name":"' + sProgramName + '", "dur":' + str(nDur) + ', "releaseYear": ' + str(nYear) + ', "releaseMonth": ' + str(nMonth) + ', "releaseDay": ' + str(nDay) + ', "company": "' + sCompany + '"}\n'
+		g_sSearchData += '},\n'
 	#}
-	return nCount
 #}
 
 def putItem2DynamoDB(sNumber, sActor, sProgramName, sDur, nYear, nMonth, nDay, sCompany, table):

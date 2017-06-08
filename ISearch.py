@@ -49,7 +49,8 @@ def _ISearch(sActor, sProgramName, log):
 		res = csd.search(query=sActor, size=10)
 		for hit in res['hits']['hit']:
 		# {
-			print hit['fields']['no'][0] + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			#print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			print hit['fields']
 		# }
 	#}
 

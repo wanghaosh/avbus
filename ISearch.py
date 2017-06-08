@@ -99,5 +99,5 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 #-------------------------------------------------------#
 if __name__ == '__main__':
 #{
-	print _ISearch(u'鲇川奈绪', u'美形な女子校生', 100, None)
+	print _ISearch(None, u'鲇川奈绪', u'美形な女子校生', 100, None)
 #}

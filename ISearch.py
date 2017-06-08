@@ -50,7 +50,9 @@ def _ISearch(sActor, sProgramName, log):
 		for hit in res['hits']['hit']:
 		# {
 			#print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			print '-----------------------------'
 			print hit['fields']
+			print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 		# }
 	#}
 

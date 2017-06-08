@@ -124,8 +124,9 @@ def ISearch():
 	sToken = getParam(request, 'token', None)
 	sActor = getParam(request, 'actor', None)
 	sProgramName = getParam(request, 'program', None)
+	nMaxCount = getParam(request, 'count', 10)
 
-	return _ISearch(sToken, sActor, sProgramName)
+	return _ISearch(sToken, sActor, sProgramName, nMaxCount, g_log)
 #}
 
 #-------------------------------------------------------#

@@ -29,7 +29,7 @@ from libLog import CLog
 import boto3
 # from libUser import CUser
 
-def _ISearch(sActor, sProgramName, nMaxCount, log):
+def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	"""
 	interface: get actor list(full)
 	"""
@@ -99,5 +99,5 @@ def _ISearch(sActor, sProgramName, nMaxCount, log):
 #-------------------------------------------------------#
 if __name__ == '__main__':
 #{
-	print _ISearch(u'鲇川奈绪', u'美形な女子校生', None)
+	print _ISearch(u'鲇川奈绪', u'美形な女子校生', 100, None)
 #}

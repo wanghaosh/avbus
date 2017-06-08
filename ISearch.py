@@ -29,31 +29,49 @@ from libLog import CLog
 import boto3
 # from libUser import CUser
 
-def _ISearch(sActor, sProgramName, log):
+def _ISearch(sActor, sProgramName, nMaxCount, log):
 	"""
 	interface: get actor list(full)
 	"""
 #{
 	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-h5ip3yilaxh457mgkbhhyehzre.ap-southeast-1.cloudsearch.amazonaws.com')
 
+	aryData = []
 	if sProgramName:
 	#{
-		res = csd.search(query=sProgramName, size=10)
+		res = csd.search(query=sProgramName, size=nMaxCount)
+		# nFoundCount = res['hits']['found']
+
 		for hit in res['hits']['hit']:
 		#{
-			print hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			# print '-----------------------------'
+			# print hit['fields']
+			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': hit['fields']['name'][0]})
 		#}
+		jsRet = {
+			"result" : "+OK",
+			"items": aryData
+		}
+		return json.dumps(jsRet, ensure_ascii=False)
 	#}
 	if sActor:
 	#{
-		res = csd.search(query=sActor, size=10)
+		res = csd.search(query=sActor, size=nMaxCount)
 		for hit in res['hits']['hit']:
 		# {
 			#print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
-			print '-----------------------------'
-			print hit['fields']
-			print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			# print '-----------------------------'
+			# print hit['fields']
+			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
+			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': hit['fields']['name'][0]})
+
 		# }
+		jsRet = {
+			"result" : "+OK",
+			"items": aryData
+		}
+		return json.dumps(jsRet, ensure_ascii=False)
 	#}
 
 	return '{"result": "-ERR", "msg": "Not Found Data."}'

@@ -204,10 +204,11 @@ def ParseDetailPage():
 	# fOut = open('numberdata.txt', 'w')
 	g_nCount = 0
 	#<input type=hidden value=
-	# sDir = '/Users/wanghao/OneDrive/wh/项目/some/Line55/detail/'
-	sDir = '/app/Line55/detail/'
+	sDir = '/Users/wanghao/OneDrive/wh/项目/some/Line55/detail/'
+	# sDir = '/app/Line55/detail/'
 	#print 'CMediaSource::parse: ' + sDir
 	files = os.listdir(sDir)
+	# nSize = 0
 	for sFile in files:
 	#{
 		# sFile = 'Abigaile Johnson.html'
@@ -217,13 +218,13 @@ def ParseDetailPage():
 		#{
 			continue
 		#}
-		print '--------------------------------------------------'
-		print sDir + sFile
+		# print '--------------------------------------------------'
+		# print sDir + sFile
 		sActor = sFile.replace('.html', '')
 		sActor = sActor.split('个人资料')[0]
 		sActor = sActor.split('资料')[0]
 		sActor = sActor.replace('()', '')
-		print '[' + sActor + ']'
+		# print '[' + sActor + ']'
 		# continue
 		f = open(sDir + sFile)
 		sData = f.read()
@@ -236,6 +237,14 @@ def ParseDetailPage():
 			# conn.commit()
 
 			print g_nCount
+			if len(g_sSearchData) > 1024 * 1024 * 4:
+			#{
+				g_sSearchData += ']'
+				fSearch = open('/Users/wanghao/Develop/avbus/cs_%d.json'%(g_nCount), 'w')
+				fSearch.write(g_sSearchData)
+				fSearch.close()
+				g_sSearchData = '[\n'
+			#}
 		#}
 		except:
 		#{
@@ -258,7 +267,7 @@ def ParseDetailPage():
 
 	# cloudsearch
 	g_sSearchData += ']'
-	fSearch = open('/app/cs.json', 'w')
+	fSearch = open('/Users/wanghao/Develop/avbus/cs_%d.json'%(g_nCount), 'w')
 	fSearch.write(g_sSearchData)
 	fSearch.close()
 #}
@@ -311,7 +320,7 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 		sCompany = aryFields[4].replace('<td style="text-align: left">', '')
 
 		g_nCount += 1
-		print '    ->[%d] ' % (g_nCount) + sNo + '|' + sProgramName + '|%d' % (nDur) + '|' + sRelease + '|' + sCompany
+		#print '    ->[%d] ' % (g_nCount) + sNo + '|' + sProgramName + '|%d' % (nDur) + '|' + sRelease + '|' + sCompany
 
 		jsData = {
 			'no': sNo,
@@ -349,10 +358,25 @@ def ParseDetailPage_One(sActor, sData, msCur, table):
 		#}
 
 		# search data
+
+
+# [{
+# 	"type": "add",
+# 	"id": "cs_17245.json",
+# 	"fields": {
+# 		"content_type": "application/json",
+# 		"resourcename": "cs_17245.json",
+# 		"content": ""
+# 	}
+# }]
 		g_sSearchData += '{"type": "add",\n'
-		g_sSearchData += '"id": "av%07d",\n'
-		g_sSearchData += '"fields": {"no":"' + sNo + '", "actor":"' + sActor + '", "name":"' + sProgramName + '", "dur":' + str(nDur) + ', "releaseYear": ' + str(nYear) + ', "releaseMonth": ' + str(nMonth) + ', "releaseDay": ' + str(nDay) + ', "company": "' + sCompany + '"}\n'
+		g_sSearchData += '"id": "av%07d",\n'%(g_nCount)
+		# g_sSearchData += '"fields": {"no":"' + sNo + '", "actor":"' + sActor + '", "name":"' + sProgramName + '", "dur":' + str(nDur) + ', "releaseyear": "' + str(nYear) + '", "releasemonth": "' + str(nMonth) + '", "releaseday": "' + str(nDay) + '", "company": "' + sCompany + '"}\n'
+
+
+		g_sSearchData += '"fields": {"no":"' + sNo + '", "actor":"' + sActor + '", "name":"' + sProgramName + '", "dur":' + str(nDur) + ', "releaseyear": ' + str(nYear) + ', "releasemonth": ' + str(nMonth) + ', "releaseday": ' + str(nDay) + ', "company": "' + sCompany + '"}\n'
 		g_sSearchData += '},\n'
+		# g_sSearchData = g_sSearchData.replace(' ', '')
 	#}
 #}
 

@@ -82,7 +82,9 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			# print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = badWordFilter(hit['fields']['name'][0])
-			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
+			sNo = hit['fields']['no'][0]
+			sNo = encrypt(sNo, 'avbus555fhzidian')
+			aryData.append({'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
 		#}
 		jsRet = {
 			"result" : "+OK",
@@ -102,7 +104,9 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			# print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = badWordFilter(hit['fields']['name'][0])
-			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
+			sNo = hit['fields']['no'][0]
+			sNo = encrypt(sNo, 'avbus555fhzidian')
+			aryData.append({'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
 
 		# }
 		jsRet = {
@@ -110,7 +114,6 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			"items": aryData
 		}
 		sRet = json.dumps(jsRet, ensure_ascii=False)
-		sRet = encrypt(sRet, 'avbus555fhzidian')
 		return sRet
 	#}
 

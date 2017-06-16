@@ -18,8 +18,10 @@ from gevent import monkey
 # monkey.patch_all()
 
 import mysql.connector
-from Crypto.Cipher import AES
-from binascii import b2a_hex, a2b_hex
+# from Crypto.Cipher import AES
+# from binascii import b2a_hex, a2b_hex
+from libAES import encrypt
+from libAES import decrypt
 import zlib
 
 from libMemC import CMemCached
@@ -125,22 +127,22 @@ def _IGetNo(sToken, sID, log):
 	#}
 	return sRetData
 #}
-
-def encrypt(sData, sKey, sIV=b'0000000000000000'):
-#{
-	mode = AES.MODE_CBC
-	encryptor = AES.new(sKey, mode, sIV)
-	nAddLen = 16 - (len(sData) % 16)
-	sData = sData + ('\0' * nAddLen)
-	sRet = encryptor.encrypt(sData)
-	return b2a_hex(sRet)
-#}
-
-def decrypt(sData, sKey, sIV = b'0000000000000000'):
-#{
-	sData = a2b_hex(sData)
-	mode = AES.MODE_CBC
-	decryptor = AES.new(sKey, mode, sIV)
-	sRet = decryptor.decrypt(sData)
-	return sRet.rstrip('\0')
-#}
+#
+# def encrypt(sData, sKey, sIV=b'0000000000000000'):
+# #{
+# 	mode = AES.MODE_CBC
+# 	encryptor = AES.new(sKey, mode, sIV)
+# 	nAddLen = 16 - (len(sData) % 16)
+# 	sData = sData + ('\0' * nAddLen)
+# 	sRet = encryptor.encrypt(sData)
+# 	return b2a_hex(sRet)
+# #}
+#
+# def decrypt(sData, sKey, sIV = b'0000000000000000'):
+# #{
+# 	sData = a2b_hex(sData)
+# 	mode = AES.MODE_CBC
+# 	decryptor = AES.new(sKey, mode, sIV)
+# 	sRet = decryptor.decrypt(sData)
+# 	return sRet.rstrip('\0')
+# #}

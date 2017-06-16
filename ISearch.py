@@ -23,6 +23,8 @@ import mysql.connector
 # import zlib
 import urllib2
 # import urllib
+from libAES import encrypt
+from libAES import decrypt
 
 from libMemC import CMemCached
 from libLog import CLog
@@ -86,7 +88,9 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			"result" : "+OK",
 			"items": aryData
 		}
-		return json.dumps(jsRet, ensure_ascii=False)
+		sRet = json.dumps(jsRet, ensure_ascii=False)
+		sRet = encrypt(sRet, 'avbus555fhzidian')
+		return sRet
 	#}
 	if sActor:
 	#{
@@ -105,7 +109,9 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			"result" : "+OK",
 			"items": aryData
 		}
-		return json.dumps(jsRet, ensure_ascii=False)
+		sRet = json.dumps(jsRet, ensure_ascii=False)
+		sRet = encrypt(sRet, 'avbus555fhzidian')
+		return sRet
 	#}
 
 	return '{"result": "-ERR", "msg": "Not Found Data."}'

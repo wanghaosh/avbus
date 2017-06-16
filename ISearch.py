@@ -55,7 +55,7 @@ def badWordFilter(sData):
 	]
 	for bw in aryBadWords:
 	#{
-		print bw
+		# print bw
 		sRet = sRet.replace(bw[0], bw[1])
 	#}
 	return sRet

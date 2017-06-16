@@ -29,6 +29,36 @@ from libLog import CLog
 import boto3
 # from libUser import CUser
 
+def badWordFilter(sData):
+#{
+	sRet = sData
+	aryBadWords = [
+		['变态', '**'],
+		['轮奸', '**'],
+		['调教', '**'],
+		['孕汁', '孕*'],
+		['痴女', '**'],
+		['巨乳', '**'],
+		['调教', '**'],
+		['尻', '*'],
+		['中出', '**'],
+		['FUCK', '****'],
+		['拘束', '**'],
+		['爆乳', '**'],
+		['淫', '*'],
+		['肛', '*'],
+		['阴', '*'],
+		['潮吹', '**'],
+		['奴隶', '**'],
+		['性奴', '**']
+	]
+	for bw in aryBadWords:
+	#{
+		sRet = sRet.replace(bw[0], bw[1])
+	#}
+	return sRet
+#}
+
 def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	"""
 	interface: get actor list(full)
@@ -47,7 +77,8 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			# print '-----------------------------'
 			# print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
-			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': hit['fields']['name'][0]})
+			sName = badWordFilter(hit['fields']['name'][0])
+			aryData.append({'no': hit['fields']['no'][0], 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
 		#}
 		jsRet = {
 			"result" : "+OK",

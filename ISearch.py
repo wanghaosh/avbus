@@ -50,7 +50,8 @@ def badWordFilter(sData):
 		[u'阴', '*'],
 		[u'潮吹', '**'],
 		[u'奴隶', '**'],
-		[u'性奴', '**']
+		[u'性奴', '**'],
+		[u'监禁', '**']
 	]
 	for bw in aryBadWords:
 	#{

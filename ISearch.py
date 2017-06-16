@@ -91,7 +91,6 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			"items": aryData
 		}
 		sRet = json.dumps(jsRet, ensure_ascii=False)
-		sRet = encrypt(sRet, 'avbus555fhzidian')
 		return sRet
 	#}
 	if sActor:

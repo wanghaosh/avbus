@@ -27,7 +27,7 @@ from libLog import CLog
 
 from libUser import CUser
 
-def _IGetActorProgramList(sActor, log):
+def _IGetActorProgramList(sActor, nPageIndex, nPageSize, log):
 	"""
 	interface: get one actor's program list
 	param:
@@ -58,17 +58,22 @@ def _IGetActorProgramList(sActor, log):
 		cur = conn.cursor()
 		#try:
 		#{
-		sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '"'
+		sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '" limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
 		cur.execute(sSql)
 		res = cur.fetchall()
 
 		aryRecs = []
 		for r in res:
 		#{
+			sName = r[2].replace('\r', '')
+			sName = sName.replace('\n', '')
+			sName = sName.replace('\t', '')
+			sName = sName.strip()
+
 			rec = {
 				"id": r[0],
 				"actor": r[1],
-				"name": r[2],
+				"name": sName,
 				"dur": r[3],
 				"release": r[4],
 				"company": r[7]

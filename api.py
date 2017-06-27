@@ -91,7 +91,9 @@ def IGetActorProgramList():
 	"""
 #{
 	sActor = getParam(request, 'actor', None)
-	return _IGetActorProgramList(sActor, g_log)
+	nPageIndex = int(getParam(request, 'pageindex', '0'))
+	nPageSize = int(getParam(request, 'pagesize', '10'))
+	return _IGetActorProgramList(sActor, nPageIndex, nPageSize, g_log)
 #}
 
 

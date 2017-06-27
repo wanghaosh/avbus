@@ -111,3 +111,9 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	log.Info('getactorprogramlist|' + sMode)
 	return sRet
 #}
+
+#-------------------------------------------------------#
+if __name__ == '__main__':
+#{
+	_IGetActorProgramList(None, '395', 0, 2, None)
+#}

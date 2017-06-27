@@ -62,6 +62,7 @@ def getFromRDS(nPageIndex, nPageSize):
 				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/" + r[0] + ".jpg",
 				"programcount": r[2]
 			}
+			print rec
 			aryRecs.append(rec)
 		# }
 
@@ -74,6 +75,7 @@ def getFromRDS(nPageIndex, nPageSize):
 			"actors": aryRecs,
 			"mode": "db"
 		}
+		print jsRet
 		sRet = json.dumps(jsRet, ensure_ascii=False)
 		return sRet
 

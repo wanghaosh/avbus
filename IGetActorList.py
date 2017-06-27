@@ -45,37 +45,56 @@ def getFromRDS(nPageIndex, nPageSize):
 #{
 	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
 	cur = conn.cursor()
-	# 	sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-	sSql = 'select actor_id, actor, count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-	print sSql
-	cur.execute(sSql)
-	res = cur.fetchall()
-
-	aryRecs = []
-	for r in res:
+	try:
 	# {
-		rec = {
-			"id": r[0],
-			"actor": r[1],
-			"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/" + r[0] + ".jpg",
-			"programcount": r[2]
+	# 	sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+	 	sSql = 'select actor_id, actor, count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+		print sSql
+		cur.execute(sSql)
+		res = cur.fetchall()
+
+		aryRecs = []
+		for r in res:
+		# {
+			rec = {
+				"id": r[0],
+				"actor": r[1],
+				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg"%(r[0]),
+				"programcount": r[2]
+			}
+			print rec
+			aryRecs.append(rec)
+		# }
+
+		cur.close()
+		conn.close()
+
+		jsRet = {
+			"result": "+OK",
+			"actorcount": len(aryRecs),
+			"actors": aryRecs,
+			"mode": "db"
 		}
-		print rec
-		aryRecs.append(rec)
+		print jsRet
+		sRet = json.dumps(jsRet, ensure_ascii=False)
+		return sRet
+
+		# return aryRecs
 	# }
+	except:
+	# {
+		cur.close()
+		conn.close()
 
-	cur.close()
-	conn.close()
+		return None
+	# }
+	# sRet = '{"result":"+OK", "actorcount":' + len(aryRecs) + ', "actors":' + str(aryRecs) + '}'
 
-	jsRet = {
-		"result": "+OK",
-		"actorcount": len(aryRecs),
-		"actors": aryRecs,
-		"mode": "db"
-	}
-	print jsRet
-	sRet = json.dumps(jsRet, ensure_ascii=False)
-	return sRet
+	# print 'size: ' + str(len(sRet))
+	# sRet = zlib.compress(sRet)
+	# print 'z size: ' + str(len(sRet))
+	# mem.Set(sKey, sRet, 3600 * 24)
+
 #}
 
 def HttpGet(sUri):

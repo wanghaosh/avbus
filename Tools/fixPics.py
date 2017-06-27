@@ -135,8 +135,14 @@ def MoveCoverFileOnS3():
 	# {
 		sFn = sDir + name + '.jpg'
 		print sFn
-		s3.Object('avbus-data', 'covers/%d.jpg'%(id)).put(Body=open(sFn, 'rb'), ACL='public-read')
-	#}
+		try:
+		#{
+			s3.Object('avbus-data', 'covers/%d.jpg'%(id)).put(Body=open(sFn, 'rb'), ACL='public-read')
+		#}
+		except:
+		#{
+			print "~~~~~~~~~~~~~~~!@@@@@@"
+		#}
 	# }
 
 #}

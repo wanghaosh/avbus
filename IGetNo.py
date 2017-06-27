@@ -96,20 +96,22 @@ def _IGetNo(sToken, sID, log):
 		cur.execute(sSql)
 		res = cur.fetchall()
 
-		aryRecs = []
+		# aryRecs = []
+		sNo = ''
 		for r in res:
 		#{
-			rec = {
-				"no":r[0]
-			}
-			aryRecs.append(rec)
+			# rec = {
+			# 	"no":r[0]
+			# }
+			# aryRecs.append(rec)
+			sNo = r[0]
+			break
 		#}
 		cur.close()
 		conn.close()
 		jsRet = {
 			"result":"+OK",
-			"count": len(aryRecs),
-			"no": aryRecs
+			"no": sNo
 		}
 		#}
 		#except:

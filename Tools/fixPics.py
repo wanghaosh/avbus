@@ -65,7 +65,52 @@ def CreateActor():
 	# }
 #}
 
+def ChangeProgramsTableActorToID():
+#{
+	conn = mysql.connector.connect(user='avbus555', password='avbus555',host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()
+	# sSql = 'select actor,count(*) from programs group by actor'
+	sSql = 'select id, name from actors'
+	cur.execute(sSql)
+	res = cur.fetchall()
+
+	# aryRecs = []
+	dictActors = {}
+	for r in res:
+	# {
+		dictActors[r[1]] = r[0]
+	# }
+
+	#
+	nCount = 0
+	for (name, id) in dictActors.items():
+	# {
+		sSql = 'update programs set actor_id=%d where actor="'%(id) + name + '"'
+		print sSql
+		# sSql = 'insert into actors(name, cover_pic) values("' + name + '", "' + cover + '")'
+
+		cur.execute(sSql)
+		# nCount += 1
+		# print str(nCount) + ' : ' + name
+	# }
+	conn.commit()
+
+	cur.close()
+	conn.close()
+
+	# jsRet = {
+	# 	"result": "+OK",
+	# 	"actorcount": len(aryRecs),
+	# 	"actors": aryRecs,
+	# 	"mode": "db"
+	# }
+	# sRet = json.dumps(jsRet, ensure_ascii=False)
+	# return sRet
+
+#}
+
 if __name__ == '__main__':
 #{
-	CreateActor()
+	# CreateActor()
+	ChangeProgramsTableActorToID()
 #}

@@ -49,7 +49,7 @@ def getFromRDS(nPageIndex, nPageSize):
 	# {
 	# 	sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
 	 	sSql = 'select actor_id, actor, count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-		print sSql
+		# print sSql
 		cur.execute(sSql)
 		res = cur.fetchall()
 
@@ -62,7 +62,7 @@ def getFromRDS(nPageIndex, nPageSize):
 				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg"%(r[0]),
 				"programcount": r[2]
 			}
-			print rec
+			# print rec
 			aryRecs.append(rec)
 		# }
 
@@ -75,7 +75,7 @@ def getFromRDS(nPageIndex, nPageSize):
 			"actors": aryRecs,
 			"mode": "db"
 		}
-		print jsRet
+		# print jsRet
 		sRet = json.dumps(jsRet, ensure_ascii=False)
 		return sRet
 

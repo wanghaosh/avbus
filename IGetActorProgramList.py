@@ -55,12 +55,6 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	if sRet == '' or sRet is None:
 	#{
 		sMode = 'db'
-		# conn = mysql.connector.connect(
-		# 	user='avline555',
-		# 	password='avline555',
-		# 	host='avline555.clciqyuahjrn.us-east-2.rds.amazonaws.com',
-		# 	database='line555'
-		# )
 		conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
 
 		cur = conn.cursor()

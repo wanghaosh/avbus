@@ -112,6 +112,9 @@ def ChangeProgramsTableActorToID():
 
 def MoveCoverFileOnS3():
 #{
+	s3 = boto3.resource('s3')
+	sDir = '/app/pics/'
+
 	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
 	cur = conn.cursor()
 
@@ -130,18 +133,11 @@ def MoveCoverFileOnS3():
 	# nCount = 0
 	for (name, id) in dictActors.items():
 	# {
-		sCmd = 'aws s3 mv "s3://avbus-data/covers/' + name + '.jpg" "s3://avbus-data/covers/%d.jpg"'%(id)
-		print sCmd
-		os.system(sCmd)
-		# sSql = 'update programs set actor_id=%d where actor="' % (id) + name + '"'
-		# print sSql
-	# sSql = 'insert into actors(name, cover_pic) values("' + name + '", "' + cover + '")'
-
-	# cur.execute(sSql)
-# nCount += 1
-# print str(nCount) + ' : ' + name
+		sFn = sDir + name + '.jpg'
+		print sFn
+		s3.Object('avline-data', 'covers/%d.jpg'%(id)).put(Body=open(sFn, 'rb'), ACL='public-read')
+	#}
 	# }
-# conn.commit()
 
 #}
 if __name__ == '__main__':

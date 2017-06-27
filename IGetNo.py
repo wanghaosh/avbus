@@ -43,14 +43,15 @@ def _IGetNo(sToken, sID, log):
 	sToken = decrypt(sToken, 'avbus555fhzidian')
 
 	jsToken = None
-	try:
-	#{
-		jsToken = json.loads(sToken)
-	#}
-	except:
-	#{
-		return '{"result": "-ERR", "msg": "illegl token 1", "errcode": "E002"}'
-	#}
+	# try:
+	# #{
+	print sToken
+	jsToken = json.loads(sToken)
+	# #}
+	# except:
+	# #{
+	# 	return '{"result": "-ERR", "msg": "illegl token 1", "errcode": "E002"}'
+	# #}
 
 	if jsToken.has_key('uid') is False:
 		return '{"result": "-ERR", "msg": "illegl token 2", "errcode": "E003"}'

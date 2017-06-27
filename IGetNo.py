@@ -45,7 +45,7 @@ def _IGetNo(sToken, sID, log):
 	jsToken = None
 	# try:
 	# #{
-	print sToken
+	print '[' + sToken + ']'
 	jsToken = json.loads(sToken)
 	# #}
 	# except:

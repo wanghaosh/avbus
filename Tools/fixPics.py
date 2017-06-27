@@ -130,7 +130,7 @@ def MoveCoverFileOnS3():
 	# nCount = 0
 	for (name, id) in dictActors.items():
 	# {
-		sCmd = 'aws s3 mv s3://avbus-data/covers/' + name + '.jpg s3://avbus-data/covers/%d.jpg'%(id)
+		sCmd = 'aws s3 mv "s3://avbus-data/covers/' + name + '.jpg" "s3://avbus-data/covers/%d.jpg"'%(id)
 		print sCmd
 		os.system(sCmd)
 		# sSql = 'update programs set actor_id=%d where actor="' % (id) + name + '"'

@@ -131,6 +131,7 @@ def _IGetActorList(nPageIndex, nPageSize, log):
 	sKey = sKey.encode('utf-8')
 
 	sRet = getFromMemcached(mem, sKey)
+	sRet = None
 	if sRet:
 	#{
 		jsRet = json.loads(sRet)

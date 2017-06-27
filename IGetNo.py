@@ -47,6 +47,7 @@ def _IGetNo(sToken, sID, log):
 	# #{
 	print '[' + sToken + ']'
 	sToken = sToken.replace(' ', '')
+	sToken = sToken.split('}')[0] + '}'
 	jsToken = json.loads(sToken)
 	# #}
 	# except:

@@ -7,6 +7,7 @@ avbus555 web api service
 
 import json
 import sys
+import os
 
 import mysql.connector
 import urllib2
@@ -109,8 +110,43 @@ def ChangeProgramsTableActorToID():
 
 #}
 
+def MoveCoverFileOnS3():
+#{
+	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()
+
+	sSql = 'select id, name from actors'
+	cur.execute(sSql)
+	res = cur.fetchall()
+
+	dictActors = {}
+	for r in res:
+	# {
+		dictActors[r[1]] = r[0]
+	# }
+	cur.close()
+	conn.close()
+
+	# nCount = 0
+	for (name, id) in dictActors.items():
+	# {
+		sCmd = 'aws s3 mv s3://avbus-data/covers/' + name + '.jpg s3://avbus-data/covers/%d.jpg'%(id)
+		print sCmd
+		os.system(sCmd)
+		# sSql = 'update programs set actor_id=%d where actor="' % (id) + name + '"'
+		# print sSql
+	# sSql = 'insert into actors(name, cover_pic) values("' + name + '", "' + cover + '")'
+
+	# cur.execute(sSql)
+# nCount += 1
+# print str(nCount) + ' : ' + name
+	# }
+# conn.commit()
+
+#}
 if __name__ == '__main__':
 #{
 	# CreateActor()
-	ChangeProgramsTableActorToID()
+	# ChangeProgramsTableActorToID()
+	MoveCoverFileOnS3()
 #}

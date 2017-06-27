@@ -21,6 +21,7 @@ def encrypt(sData, sKey, sIV=b'0000000000000000'):
 def decrypt(sData, sKey, sIV = b'0000000000000000'):
 #{
 	sData = a2b_hex(sData)
+	print sData
 	mode = AES.MODE_CBC
 	decryptor = AES.new(sKey, mode, sIV)
 	sRet = decryptor.decrypt(sData)

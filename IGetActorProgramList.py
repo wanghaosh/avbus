@@ -78,7 +78,7 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 			sName = r[2].replace('\r', '')
 			sName = sName.replace('\n', '')
 			sName = sName.replace('\t', '')
-			sName = sName.replace('\\u0000', '')
+			sName = sName.replace('\u0000', '')
 			sName = sName.strip()
 
 			rec = {

@@ -31,6 +31,6 @@ def decrypt(sData, sKey, sIV = b'0000000000000000'):
 #-------------------------------------------------------#
 if __name__ == '__main__':
 #{
-	print decrypt('1c6b7cda856b9245ec0b899324d2c016b770bc100efcd1e360dbc686c6e8d4c346b6d4750ae58cb6588a39dd4dcc4467d457f6fd0b3664b8108a49b285f47592a4d5e02890569eb38a40cb62be9712758ca31a34a68d112e4fb3ac91d99237bf',
+	print decrypt('11bad81b6772098ea2552f5a450eda063975202004e70634c32398b3971e37eeff2168373ec7aad411daa2cf9aa1a1c42daaaafab672f1024436728b018560fbd3e7b1b89f956c89c4bbbadd7aeed2ad3e5433c345ae61551494ac6ae73f9724',
 			'avbus555fhzidian')
 #」

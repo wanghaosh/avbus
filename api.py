@@ -134,7 +134,7 @@ def ISearch():
 #}
 
 @app.route('/api/profile', methods=['POST'])
-def ISearch():
+def IProfile():
 #{
 	sToken = getParam(request, 'token', None)
 

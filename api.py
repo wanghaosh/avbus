@@ -32,6 +32,7 @@ from IGetActorProgramList import _IGetActorProgramList
 from IGetNo import _IGetNo
 from IGetYearsProgramList import _IGetYearsProgramList
 from ISearch import _ISearch
+from IProfile import _IProfile
 
 ################################
 from flask import Flask
@@ -130,6 +131,14 @@ def ISearch():
 	nMaxCount = getParam(request, 'count', 10)
 
 	return _ISearch(sToken, sActor, sProgramName, nMaxCount, g_log)
+#}
+
+@app.route('/api/profile', methods=['POST'])
+def ISearch():
+#{
+	sToken = getParam(request, 'token', None)
+
+	return _IProfile(sToken, g_log)
 #}
 
 #-------------------------------------------------------#

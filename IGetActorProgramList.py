@@ -108,12 +108,15 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 		sRet = json.dumps(jsRet, ensure_ascii=False)
 		mem.Set(sKey, sRet, 3600 * 24)
 	#}
-	log.Info('getactorprogramlist|' + sMode)
+	if log:
+	#{
+		log.Info('getactorprogramlist|' + sMode)
+	#}
 	return sRet
 #}
 
 #-------------------------------------------------------#
 if __name__ == '__main__':
 #{
-	_IGetActorProgramList(None, '395', 0, 2, None)
+	print _IGetActorProgramList(None, '395', 0, 2, None)
 #}

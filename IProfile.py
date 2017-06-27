@@ -58,11 +58,13 @@ def _IProfile(sToken, log):
 
 	user = CUser(jsToken['uid'])
 	nPoint = user.GetPoint()
+	print nPoint
 
 	jsRet = {
 		"result":"+OK",
 		"point": nPoint
 	}
+	print jsRet
 	return json.dumps(jsRet, ensure_ascii=False)
 
 	#}

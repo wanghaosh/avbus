@@ -39,7 +39,15 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 
 	sMode = 'mem'
 	mem = CMemCached()
-	sKey = 'api_getactorprogramlist_' + sActor + '_%d_%d'%(nPageIndex, nPageSize)
+	sKey = ''
+	if sActor:
+	#{
+		sKey = 'api_getactorprogramlist_' + sActor + '_%d_%d'%(nPageIndex, nPageSize)
+	#}
+	if sActorID:
+	#{
+		sKey = 'api_getactorprogramlist_' + sActorID + '_%d_%d' % (nPageIndex, nPageSize)
+	#}
 	sKey = sKey.encode('utf-8')
 	sRet = mem.Get(sKey)
 

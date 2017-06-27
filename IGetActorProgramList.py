@@ -27,15 +27,15 @@ from libLog import CLog
 
 from libUser import CUser
 
-def _IGetActorProgramList(sActor, nPageIndex, nPageSize, log):
+def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	"""
 	interface: get one actor's program list
 	param:
 		actor: actor name
 	"""
 #{
-	if sActor is None:
-		return '{"result": "-ERR", "msg": "not fount parameter [actor]"}'
+	if sActor is None and sActorID is None:
+		return '{"result": "-ERR", "msg": "not fount parameter [actor/actorid]"}'
 
 	sMode = 'mem'
 	mem = CMemCached()
@@ -58,7 +58,15 @@ def _IGetActorProgramList(sActor, nPageIndex, nPageSize, log):
 		cur = conn.cursor()
 		#try:
 		#{
-		sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '" limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+		if sActor:
+		#{
+			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '" limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+		#}
+		if sActorID:
+		#{
+			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor_id=' + sActorID + ' limit %d, %d' % (nPageIndex * nPageSize, nPageSize)
+		#}
+
 		cur.execute(sSql)
 		res = cur.fetchall()
 

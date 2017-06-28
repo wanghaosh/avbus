@@ -12,7 +12,7 @@ import json
 # import urllib2
 # import urllib
 import sys
-
+import traceback
 from gevent import monkey
 # from gevent.pywsgi import WSGIServer
 # monkey.patch_all()
@@ -84,6 +84,11 @@ def getFromRDS(nPageIndex, nPageSize):
 	# }
 	except:
 	# {
+		info = sys.exc_info()
+		print str(info)
+
+
+		print traceback.format_exc()
 		cur.close()
 		conn.close()
 

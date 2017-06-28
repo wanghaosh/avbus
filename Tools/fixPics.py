@@ -275,4 +275,5 @@ if __name__ == '__main__':
 	# MoveCoverFileOnS3()
 	# FixDB_Programs()
 	# SplitAlias()
+	DisableRepeatedActor()
 #}

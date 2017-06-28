@@ -193,5 +193,6 @@ if __name__ == '__main__':
 #{
 	# CreateActor()
 	# ChangeProgramsTableActorToID()
-	MoveCoverFileOnS3()
+	# MoveCoverFileOnS3()
+	FixDB_Programs()
 #}

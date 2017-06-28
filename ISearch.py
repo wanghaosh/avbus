@@ -25,43 +25,43 @@ import urllib2
 # import urllib
 from libAES import encrypt
 from libAES import decrypt
-
+from libWordFilter import CWordFilter
 from libMemC import CMemCached
 from libLog import CLog
 import boto3
 # from libUser import CUser
-
-def badWordFilter(sData):
-#{
-	sRet = sData
-	aryBadWords = [
-		[u'变态', '**'],
-		[u'轮奸', '**'],
-		[u'调教', '**'],
-		[u'孕汁', '**'],
-		[u'痴女', '**'],
-		[u'巨乳', '**'],
-		[u'调教', '**'],
-		[u'尻', '*'],
-		[u'中出', '**'],
-		[u'FUCK', '****'],
-		[u'拘束', '**'],
-		[u'爆乳', '**'],
-		[u'淫', '*'],
-		[u'肛', '*'],
-		[u'阴', '*'],
-		[u'潮吹', '**'],
-		[u'奴隶', '**'],
-		[u'性奴', '**'],
-		[u'监禁', '**']
-	]
-	for bw in aryBadWords:
-	#{
-		# print bw
-		sRet = sRet.replace(bw[0], bw[1])
-	#}
-	return sRet
-#}
+#
+# def badWordFilter(sData):
+# #{
+# 	sRet = sData
+# 	aryBadWords = [
+# 		[u'变态', '**'],
+# 		[u'轮奸', '**'],
+# 		[u'调教', '**'],
+# 		[u'孕汁', '**'],
+# 		[u'痴女', '**'],
+# 		[u'巨乳', '**'],
+# 		[u'调教', '**'],
+# 		[u'尻', '*'],
+# 		[u'中出', '**'],
+# 		[u'FUCK', '****'],
+# 		[u'拘束', '**'],
+# 		[u'爆乳', '**'],
+# 		[u'淫', '*'],
+# 		[u'肛', '*'],
+# 		[u'阴', '*'],
+# 		[u'潮吹', '**'],
+# 		[u'奴隶', '**'],
+# 		[u'性奴', '**'],
+# 		[u'监禁', '**']
+# 	]
+# 	for bw in aryBadWords:
+# 	#{
+# 		# print bw
+# 		sRet = sRet.replace(bw[0], bw[1])
+# 	#}
+# 	return sRet
+# #}
 
 def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	"""
@@ -81,7 +81,7 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			# print '-----------------------------'
 			# print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
-			sName = badWordFilter(hit['fields']['name'][0])
+			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 			sNo = hit['fields']['no'][0]
 			sNo = encrypt(sNo, 'avbus555fhzidian')
 			aryData.append({'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
@@ -102,7 +102,7 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			# print '-----------------------------'
 			# print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
-			sName = badWordFilter(hit['fields']['name'][0])
+			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 			sNo = hit['fields']['no'][0]
 			sNo = encrypt(sNo, 'avbus555fhzidian')
 			aryData.append({'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})

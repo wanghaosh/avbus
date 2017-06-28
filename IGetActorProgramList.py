@@ -26,6 +26,7 @@ from libMemC import CMemCached
 from libLog import CLog
 
 from libUser import CUser
+from libWordFilter import CWordFilter
 
 def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	"""
@@ -80,6 +81,7 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 			sName = sName.replace('\t', '')
 			sName = sName.replace('\u0000', '')
 			sName = sName.strip()
+			sName = CWordFilter.badWordFilter(sName)
 
 			rec = {
 				"id": r[0],

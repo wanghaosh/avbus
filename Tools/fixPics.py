@@ -191,15 +191,65 @@ def FixDB_Programs():
 	cur.close()
 	conn.close()
 #}
-
+#
 # def DisableRepeatedActor():
 # #{
+# 	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+# 	cur = conn.cursor()
+# 	sSql = 'select number, count(*) from programs group by number;'
+# 	cur.execute(sSql)
+# 	res = cur.fetchall()
+#
+# 	dictPrograms = {}
+# 	for r in res:
+# 	#{
+# 		if r[1] <= 1:
+# 		#{
+# 			continue
+# 		#}
+# 		dictPrograms[r[0]] = r[1]
+# 	#}
+#
+# 	dictActors = {}
+# 	for (sNumber, nCount) in dictPrograms.items():
+# 	#{
+# 		sSql = 'update actors set status=0 where id=' +
+# 	#}
 # #}
+
+def SplitAlias():
+#{
+	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()
+	sSql = 'select id, name from actors'
+	cur.execute(sSql)
+	res = cur.fetchall()
+
+	dictActors = {}
+	for r in res:
+	#{
+		aryName = r[1].split('(')
+		sName = aryName[0]
+		sAlias = ''
+		if len(aryName) > 1:
+		#{
+			sAlias = aryName[1]
+		#}
+		dictActors[r[0]] = [sName, sAlias]
+	#}
+
+	for (id, aryName) in dictActors.items():
+	#{
+		sSql = 'update actors set name="' + aryName[0] + '", alias="' + aryName[1] + '" where id=' + str(id)
+		print sSql
+	#}
+#}
 
 if __name__ == '__main__':
 #{
 	# CreateActor()
 	# ChangeProgramsTableActorToID()
 	# MoveCoverFileOnS3()
-	FixDB_Programs()
+	# FixDB_Programs()
+	SplitAlias()
 #}

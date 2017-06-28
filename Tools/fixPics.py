@@ -146,6 +146,49 @@ def MoveCoverFileOnS3():
 	# }
 
 #}
+
+def FixDB_Programs():
+#{
+	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()
+
+	sSql = 'select id, number, name from programs'
+	cur.execute(sSql)
+	res = cur.fetchall()
+
+	# dictActors = {}
+	dictPrograms = {}
+	for r in res:
+	# {
+		sNumber = r[1]
+		# sName = r[2]
+
+		sNumber = sNumber.replace('⇥', '')
+		# sNumber = sNumber.replace('⇥⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥', '')
+		sNumber = sNumber.strip()
+		if sNumber == r[1]:
+		#{
+			continue
+		#}
+		dictPrograms[r[0]] = sNumber
+	# }
+
+	for (id, number) in dictPrograms.items():
+	#{
+		sSql = 'update programs set number="' + number + '" where id=' + str(id)
+		print sSql
+		cur.execute(sSql)
+	#}
+	conn.commit()
+
+	cur.close()
+	conn.close()
+#}
+
+# def DisableRepeatedActor():
+# #{
+# #}
+
 if __name__ == '__main__':
 #{
 	# CreateActor()

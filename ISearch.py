@@ -104,9 +104,10 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
+			sID = hit['fields']['id'][0]
 			sNo = hit['fields']['no'][0]
 			sNo = encrypt(sNo, 'avbus555fhzidian')
-			aryData.append({'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
+			aryData.append({'id', sID, 'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
 
 		# }
 		jsRet = {

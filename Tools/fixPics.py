@@ -242,7 +242,12 @@ def SplitAlias():
 	#{
 		sSql = 'update actors set name="' + aryName[0] + '", alias="' + aryName[1] + '" where id=' + str(id)
 		print sSql
+		cur.execute(sSql)
 	#}
+	conn.commit()
+
+	cur.close()
+	conn.close()
 #}
 
 if __name__ == '__main__':

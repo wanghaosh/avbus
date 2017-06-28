@@ -163,7 +163,7 @@ def FixDB_Programs():
 		sNumber = r[1]
 		# sName = r[2]
 
-		sNumber = sNumber.replace('⇥', '')
+		sNumber = sNumber.replace('\⇥', '')
 		# sNumber = sNumber.replace('⇥⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥ ⇥', '')
 		sNumber = sNumber.strip()
 		if sNumber == r[1]:

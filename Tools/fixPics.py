@@ -220,13 +220,14 @@ def DisableRepeatedActor():
 		#{
 			continue
 		#}
-		print v
+		print k
 		for item in v:
 		#{
+			print '     ->' + item[1]
 			if item[1] == '-':
 			#{
 				sSql = 'update actors set status=0 where id=' + str(item[0])
-				print sSql
+				print '        -> ' + sSql
 			#}
 		#}
 	#}

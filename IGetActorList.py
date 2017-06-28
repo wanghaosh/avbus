@@ -47,9 +47,8 @@ def getFromRDS(nPageIndex, nPageSize):
 	cur = conn.cursor()
 	try:
 	# {
-	# 	sSql = 'select actor,count(*) from programs group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-	 	sSql = 'select actor_id, actor, count(*) from programs where online=1 group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-		# print sSql
+	#  	sSql = 'select actor_id, actor, count(*) from programs where online=1 group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+		sSql = 'select id, name, alias from actor where status=1 limit %d,%d'%(nPageIndex * nPageSize, nPageSize)
 		cur.execute(sSql)
 		res = cur.fetchall()
 
@@ -59,8 +58,10 @@ def getFromRDS(nPageIndex, nPageSize):
 			rec = {
 				"id": r[0],
 				"actor": r[1],
+				"alias": r[2],
 				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg"%(r[0]),
-				"programcount": r[2]
+				# "programcount": r[2]
+				"programcount": 0
 			}
 			# print rec
 			aryRecs.append(rec)

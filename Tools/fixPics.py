@@ -161,18 +161,9 @@ def FixDB_Programs():
 	dictPrograms = {}
 	for r in res:
 	# {
-	# 	sNumber = r[1]
-    #
-	# 	sNumber = sNumber.replace('⇥', '')
-	# 	sNumber = sNumber.strip()
-	# 	if sNumber == r[1]:
-	# 	#{
-	# 		continue
-	# 	#}
-	# 	dictPrograms[r[0]] = sNumber
-		sName = r[2]#.decode("utf-8").encode("gbk")
+		sName = r[2]
 
-		sName = sName.replace('&rsquo;', '')
+		sName = sName.replace('⇥', '')
 		sName = sName.strip()
 		if sName == r[2]:
 			continue
@@ -181,10 +172,9 @@ def FixDB_Programs():
 
 	for (id, name) in dictPrograms.items():
 	#{
-		# sSql = 'update programs set number="' + number + '" where id=' + str(id)
 		sSql = 'update programs set name="' + name + '" where id=' + str(id)
 		print sSql
-		# cur.execute(sSql)
+		cur.execute(sSql)
 	#}
 	conn.commit()
 
@@ -276,7 +266,7 @@ if __name__ == '__main__':
 	# CreateActor()
 	# ChangeProgramsTableActorToID()
 	# MoveCoverFileOnS3()
-	# FixDB_Programs()
+	FixDB_Programs()
 	# SplitAlias()
-	DisableRepeatedActor()
+	# DisableRepeatedActor()
 #}

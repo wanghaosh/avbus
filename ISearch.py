@@ -107,7 +107,7 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 			sID = hit['fields']['id'][0]
 			sNo = hit['fields']['no'][0]
 			sNo = encrypt(sNo, 'avbus555fhzidian')
-			aryData.append({'id', sID, 'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
+			aryData.append({'id': sID, 'no': sNo, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
 
 		# }
 		jsRet = {

@@ -48,7 +48,7 @@ def getFromRDS(nPageIndex, nPageSize):
 	try:
 	# {
 	#  	sSql = 'select actor_id, actor, count(*) from programs where online=1 group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
-		sSql = 'select id, name, alias from actor where status=1 limit %d,%d'%(nPageIndex * nPageSize, nPageSize)
+		sSql = 'select id, name, alias from actors where status=1 limit %d,%d'%(nPageIndex * nPageSize, nPageSize)
 		cur.execute(sSql)
 		res = cur.fetchall()
 

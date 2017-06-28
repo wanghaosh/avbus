@@ -79,7 +79,7 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 		for hit in res['hits']['hit']:
 		#{
 			# print '-----------------------------'
-			# print hit['fields']
+			print hit['fields']
 			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 			sNo = hit['fields']['no'][0]

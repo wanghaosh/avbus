@@ -230,10 +230,10 @@ def SplitAlias():
 	#{
 		aryName = r[1].split('(')
 		sName = aryName[0]
-		sAlias = ''
+		sAlias = '-'
 		if len(aryName) > 1:
 		#{
-			sAlias = aryName[1]
+			sAlias = aryName[1].replace(')', '')
 		#}
 		dictActors[r[0]] = [sName, sAlias]
 	#}

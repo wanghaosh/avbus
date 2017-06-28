@@ -68,7 +68,7 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	interface: get actor list(full)
 	"""
 #{
-	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-h5ip3yilaxh457mgkbhhyehzre.ap-southeast-1.cloudsearch.amazonaws.com')
+	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-v1-gnsia355htzip3dgfvzas52rda.ap-southeast-1.cloudsearch.amazonaws.com')
 
 	aryData = []
 	if sProgramName:

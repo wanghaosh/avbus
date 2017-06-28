@@ -72,6 +72,20 @@ def getParam(request, sParamName, sDefaultValue):
 	return sParamValue
 #}
 
+@app.route('/api/license', methods=['GET'])
+def IGetLicense():
+#{
+	sLicense = '用户协议\n'
+	sLicense += '特别提示\n'
+	sLicense += '福利书在此特别提醒您（用户）在成为用户之前，请认真阅读本《用户协议》（以下简称“协议”），确保您充分理解本协议中各条款。请您审慎阅读并选择接受或不接受本协议。除非您接受本协议所有条款，否则您无权使用本协议所涉服务。您的使用行为将视为对本协议的接受，并同意接受本协议各项条款的约束。\n'
+
+	sLicense += '1）福利书是一个索引工具，仅提供查询影片信息的功能，并不提供影片内容（不提供播放，也不提供指向影片的链接）。\n'
+	sLicense += '2）服务中所有的内容（文字、图片）均通过公开网络获取，为符合法律法规的要求，已采用技术手段对部分内容进行了过滤和隐藏。如因技术问题出现遗漏，请确认您所处的地域法律法规是否禁止此类内容，如果该内容是被法律法规所禁止的，请您中止访问并提交反馈帮助我们进行调整以符合法规要求。\n'
+	sLicense += '3）如果您未满18岁或者您在您的居住管辖区内属于未成年人，请立即离开。\n'
+
+	return sLicense
+#}
+
 @app.route('/api/getactorlist', methods=['GET'])
 def IGetActorList():
 	"""

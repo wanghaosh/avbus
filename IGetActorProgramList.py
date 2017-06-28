@@ -62,11 +62,11 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 		#{
 		if sActor:
 		#{
-			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor="' + sActor + '" limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
+			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where online=1 and actor="' + sActor + '" limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
 		#}
 		if sActorID:
 		#{
-			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where actor_id=' + sActorID + ' limit %d, %d' % (nPageIndex * nPageSize, nPageSize)
+			sSql = 'select id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs where online=1 and actor_id=' + sActorID + ' limit %d, %d' % (nPageIndex * nPageSize, nPageSize)
 		#}
 
 		cur.execute(sSql)

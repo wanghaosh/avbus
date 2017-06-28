@@ -228,10 +228,12 @@ def DisableRepeatedActor():
 			#{
 				sSql = 'update actors set status=0 where id=' + str(item[0])
 				print '        -> ' + sSql
+				cur.execute(sSql)
 			#}
 		#}
 	#}
 
+	conn.commit()
 	cur.close()
 	conn.close()
 #}

@@ -49,12 +49,14 @@ def getFromRDS(nPageIndex, nPageSize):
 	# {
 	#  	sSql = 'select actor_id, actor, count(*) from programs where online=1 group by actor limit %d, %d'%(nPageIndex * nPageSize, nPageSize)
 		sSql = 'select id, name, alias, program_count from actors where status=1 limit %d,%d'%(nPageIndex * nPageSize, nPageSize)
+		print sSql
 		cur.execute(sSql)
 		res = cur.fetchall()
 
 		aryRecs = []
 		for r in res:
 		# {
+			print r
 			rec = {
 				"id": r[0],
 				"actor": r[1],

@@ -1,0 +1,33 @@
+#!/bin/bash
+# chkconfig: 35 95 1
+# description: script to start/stop ws service
+
+start() {
+  /usr/local/bin/gunicorn -k gevent -c /app/srv_api/gun_api.conf --pythonpath /app/srv_api/ -D api:app
+}
+
+debug() {
+  /usr/local/bin/gunicorn -k gevent -c /app/srv_api/gun_api.conf --pythonpath /app/srv_api/ api:app
+}
+
+stop() {
+  /app/stopService.py gun_api.conf
+}
+
+case $1 in
+start)
+  start
+;;
+stop)
+  stop
+;;
+restart)
+  stop
+  start
+;;
+debug)
+  debug
+;;
+*)
+echo "Usage: $0 (start|stop|restart|debug)"
+esac

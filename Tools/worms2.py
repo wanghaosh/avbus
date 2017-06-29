@@ -93,13 +93,31 @@ class C1sdy:
 			nPageIndex = 0
 			while nPageIndex >= 0:
 			#{
-				if nPageIndex == 0:
+				bRetry = False
+				while bRetry:
 				#{
-					nPageIndex = self.GetOnePage('%d.html'%(nPageName))
-				#}
-				else:
-				#{
-					nPageIndex = self.GetOnePage('%d-%d.html' % (nPageName, nPageIndex))
+					if nPageIndex == 0:
+					#{
+						try:
+						#{
+							nPageIndex = self.GetOnePage('%d.html'%(nPageName))
+						#}
+						except:
+						#{
+							bRetry = True
+						#}
+					#}
+					else:
+					#{
+						try:
+						#{
+							nPageIndex = self.GetOnePage('%d-%d.html' % (nPageName, nPageIndex))
+						#}
+						except:
+						#{
+							bRetry = True
+						#}
+					#}
 				#}
 			#}
 			# break

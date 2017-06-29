@@ -100,7 +100,7 @@ def ISearchR():
 @app.route('/api/r/a', methods=['GET'])
 def IR_a():
 #{
-	return _IR_a(["", ""])
+	return _IR_a(["47", "91", "121", "470", "576", "954", "1222", "1299", "1465", "1497", "1977", "2203"])
 #}
 
 @app.route('/api/getactorlist', methods=['GET'])

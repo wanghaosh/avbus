@@ -88,7 +88,8 @@ class C1sdy:
 
 	def GetAllPage(self):
 	#{
-		for nPageName in range(86, 513):
+		# for nPageName in range(86, 513):
+		for nPageName in range(173, 513):
 		#{
 			nPageIndex = 0
 			while nPageIndex >= 0:

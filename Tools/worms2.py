@@ -34,6 +34,11 @@ import boto3
 import traceback
 # g_log = CLog()
 # g_log.Init('/logs/cdnChecker.log', '1')
+conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+cur = conn.cursor()
+
+s3 = boto3.resource('s3')
+
 
 class CHttp:
 #{
@@ -141,7 +146,7 @@ class C1sdy:
 		sDetail = sData.split('简介</a>')[1].split('</div>')[0].replace('<br />', '\n').replace('<div class="u">', '').replace('</br>', '')
 		# print sDetail
 
-		self.AddActor(sActor, sPic, sDetail)
+		nActorID = self.AddActor(sActor, sPic, sDetail)
 
 		aryProgramsTmp = sData.split('<div class="showPlay">')[1].split('<a href="')#.split('.html" target="_blank"><img src="')
 		for sTmp in aryProgramsTmp:
@@ -155,11 +160,8 @@ class C1sdy:
 			aryTmp = sOneProgram.split('" alt="')
 			sCoverPic = aryTmp[0]
 			sNo = aryTmp[1].split(' ')[1]
-			# print '    -> [' + sNo + '] ' + sDetailPageUri + ' / ' + sCoverPic
-			# print '    -> ' + sNo
 
-			# self.AddProgram(sActor, , sCoverPic, sNo, )
-			self.GetProgramDetailPage(sDetailPageUri, sActor, sNo, sCoverPic)
+			self.GetProgramDetailPage(sDetailPageUri, nActorID, sActor, sNo, sCoverPic)
 		#}
 		sTmp = sData.split('页次:')[1].split('页')[0]
 		nCurPage = int(sTmp.split('/')[0])
@@ -170,7 +172,7 @@ class C1sdy:
 		return nCurPage + 1
 	#}
 
-	def GetProgramDetailPage(self, sUri, sActor, sNo, sCoverPic):
+	def GetProgramDetailPage(self, sUri, nActorID, sActor, sNo, sCoverPic):
 	#{
 		sData = CHttp.HttpGet(sUri)
 		sData = sData.replace('\r', '').replace('\n', '').replace('<br>', '').replace('<p>', '')
@@ -183,10 +185,10 @@ class C1sdy:
 		sName = aryTmp[7].replace('</li>', '')#.replace('\n', '')
 		sInfo = sData.split('<div class="showInfo">')[1].split('</div>')[0]
 
-		self.AddProgram(sActor, sName.strip(' '), sNo, sCoverPic, sInfo.strip(' '), sDT.strip(' '))
+		self.AddProgram(nActorID, sActor, sName.strip(' '), sNo, sCoverPic, sInfo.strip(' '), sDT.strip(' '))
 	#}
 
-	def AddActor(self, sActor, sActorPic, sDetail):
+	def AddActor(self, sActor, sActorPic, sDetail, cur, conn):
 	#{
 		print sActor + ' : ' + sActorPic
 		# print '  -> ' + sDetail
@@ -200,12 +202,55 @@ class C1sdy:
 		#{
 			self.m_dictActors[sActor]['programs'] = []
 		#}
+
+		# 查询数据库中是否有同名演员（有，补充信息&获取id；无，新增记录获得id）
+		sSql = 'select id from actors where name="' + sActor + '" and status=1'
+		cur.execute(sSql)
+		res = cur.fetchall()
+		nID = 0
+		for r in res:
+		#{
+			nID = r[0]
+			break
+		#}
+		if nID > 0:
+		#{
+			sSql = 'update actors set detail="' + sDetail + '" where id=' + str(nID)
+			print sSql
+			cur.execute(sSql)
+			conn.commit()
+		#}
+		else:
+		#{
+			# 数据库中没有同名演员
+			sSql = 'insert into actors(name, alias, detail, cover_pic, status, program_count) values("' + sActor + '", "-", "' + sDetail + '", "' + sActorPic + '", 1, 0)'
+			print sSql
+			cur.execute(sSql)
+			conn.commit()
+
+			cur.execute('select @@IDENTITY')
+			res = cur.fetchall()
+			for r in res:
+			#{
+				nID = r[0]
+				break
+			#}
+		#}
+
+
+		# 下载人物图&上传到S3
+		sCmd = 'curl -o "' + sActor + '_%d.jpg" --referer "http://www.1sdy.com" "'%(nID) + sActorPic + '" -A "Mozilla/5.0 (Windows NT 6.1)"'
+		print sCmd
+		os.system(sCmd)
+
+		s3.Object('avbus-data', 'covers2/%d.jpg' % (nID)).put(Body=open(sActor + '_%d.jpg' % (nID), 'rb'), ACL='public-read')
+
+		return nID
 	#}
 
 	def AddProgram(self, sActor, sProgramName, sProgramNo, sProgramCover, sProgramDetail, sDT):
 	#{
 		print '  -> [' + sProgramNo + '] ' + sDT + ' / ' + sProgramName
-		# print '  -> [' + sProgramNo + '] ' + sProgramName# + ' / ' + sProgramDetail
 		dictProgram = {
 				'name': sProgramName.strip(' '),
 				'no': sProgramNo.strip(' '),
@@ -229,9 +274,10 @@ class C1sdy:
 
 def ImportDataToProductEnv():
 #{
-	s3 = boto3.resource('s3')
+
 	sDir = '/app/pics/'
 	pics = os.listdir(sDir)
+	dictData = {}
 	for sFn in pics:
 	# {
 		if sFn.find('.json') < 0:
@@ -246,9 +292,25 @@ def ImportDataToProductEnv():
 
 		f.close()
 		jsData = json.loads(sData)
+
+		if dictData.has_key(sActor) is False:
+		#{
+			# dictData[sActor]['']
+			dictData[sActor]['programs'] = []
+		#}
+		dictData[sActor]['programs'].append(
+			{
+				"no": sNo,
+				"cover": jsData['cover'],
+				"name": jsData['name'].replace('别名：', ''),
+				'dt': jsData['dt'].replace('年份：', '年'),
+				'detail': jsData['detail']
+			}
+		)
 		# s3.Object('avbus-data', 'covers/' + sLocalFn).put(Body=open(sDir + sFn, 'rb'), ACL='public-read')
 
 		# step.1 write to MySQL
+		# sSql = 'insert into actors(name, alias, cover_pic, status, program_count'
 
 		# step.2 upload pic to S3
 	# }

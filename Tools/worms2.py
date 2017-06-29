@@ -226,6 +226,32 @@ class C1sdy:
 	#}
 #}
 
+def ImportDataToProductEnv():
+#{
+	s3 = boto3.resource('s3')
+	sDir = '/app/pics/'
+	pics = os.listdir(sDir)
+	for sFn in pics:
+	# {
+		if sFn.find('.json') < 0:
+			continue
+		sLocalFn = sDir + sFn
+		aryTmp = sLocalFn.replace('.json', '').split('_')
+		sActor = aryTmp[0]
+		sNo = aryTmp[1]
+
+		f = open(sLocalFn)
+		sData = f.read()
+
+		f.close()
+		jsData = json.loads(sData)
+		# s3.Object('avbus-data', 'covers/' + sLocalFn).put(Body=open(sDir + sFn, 'rb'), ACL='public-read')
+
+		# step.1 write to MySQL
+
+		# step.2 upload pic to S3
+	# }
+#}
 
 if __name__ == '__main__':
 #{

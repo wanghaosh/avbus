@@ -33,6 +33,7 @@ from IGetNo import _IGetNo
 from IGetYearsProgramList import _IGetYearsProgramList
 from ISearch import _ISearch
 from IProfile import _IProfile
+from IR_a import _IR_a
 
 ################################
 from flask import Flask
@@ -84,6 +85,22 @@ def IGetLicense():
 	sLicense += '3）如果您未满18岁或者您在您的居住管辖区内属于未成年人，请立即离开。\n'
 
 	return sLicense
+#}
+
+@app.route('/api/search/hotwords', methods=['GET'])
+def ISearchR():
+	"""
+	搜索的热词推荐
+	:return:
+	"""
+#{
+	return '{"result": "+OK", "data": ["里美", "麻生希", "Rio", "三上悠", "上原亚衣", "julia", "冲田杏梨", "吉泽明步", "大桥未久", "小川阿佐美"]}'
+#}
+
+@app.route('/api/r/a', methods=['GET'])
+def IR_a():
+#{
+	return _IR_a(["", ""])
 #}
 
 @app.route('/api/getactorlist', methods=['GET'])

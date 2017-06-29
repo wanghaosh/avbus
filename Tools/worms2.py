@@ -105,7 +105,7 @@ class C1sdy:
 			# break
 		#}
 		sData = json.dumps(self.m_dictActors, ensure_ascii=False)
-		f = open('/Users/wanghao/Develop/avbus/Tools/data_1sdy.txt', 'w')
+		f = open('data_1sdy.json', 'w')
 		f.write(sData)
 		f.close()
 	#}

@@ -144,7 +144,14 @@ class COneActor:
 
 		nActorID = self._addActor2MySQL(self.m_sActorName, self.m_sActorPicUri, self.m_sActorInfo)
 
-		self._parseProgramInfo(sData, nActorID, self.m_sActorName)
+		try:
+		#{
+			self._parseProgramInfo(sData, nActorID, self.m_sActorName)
+		#}
+		except:
+		#{
+			print 'except: ' + sUri
+		#}
 
 		sTmp = sData.split('页次:')[1].split('页')[0]
 		nCurPage = int(sTmp.split('/')[0])

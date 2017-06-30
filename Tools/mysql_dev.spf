@@ -66,9 +66,13 @@
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
-			<string>select * from actors;
+			<string>select * from actors where id=713;
 
--- update actors set src_site='www.99fanhao.com';</string>
+-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where id&gt;172678;
+
+-- delete from programs where id&gt;172678;</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -83,6 +87,17 @@
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where id&gt;172678</string>
+		<string>delete from programs where id&gt;172678</string>
+		<string>select * from actors where id=713</string>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where actor_id='713'</string>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs limit 10</string>
 		<string>select * from actors</string>
 		<string>update actors set src_site='www.99fanhao.com'</string>
 		<string>SELECT LAST_INSERT_ID()</string>
@@ -98,11 +113,6 @@
 		<string>update actors set program_count=(select count(*) from programs where id=actor_id)</string>
 		<string>select * from programs where id='71320'</string>
 		<string>select * from programs limit 1000</string>
-		<string>select * from programs where actor='AYA'</string>
-		<string>select * from programs where id='172097'</string>
-		<string>select * from programs where id='133567'</string>
-		<string>select * from programs where id='23431'</string>
-		<string>select * from programs where id='28070'</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

@@ -36,11 +36,12 @@ from libOneActor import COneActor
 # g_log = CLog()
 # g_log.Init('/logs/cdnChecker.log', '1')
 
+import mysql.connector
 g_conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
 g_cur = g_conn.cursor()
 g_mysql = [g_conn, g_cur]
 #
-# s3 = boto3.resource('s3')
+s3 = boto3.resource('s3')
 
 class C1sdy:
 #{
@@ -54,7 +55,7 @@ class C1sdy:
 	#{
 		for nPageName in range(86, 513):
 		#{
-			a = COneActor(nPageName, g_mysql)
+			a = COneActor(nPageName, g_mysql, s3, '/Users/wanghao/Develop/avbus/Tools/worm_1sdy/data/')
 			a.GetAndParse()
 			break
 		#}

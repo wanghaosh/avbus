@@ -163,6 +163,7 @@ class COneActor:
 
 		# sDT = aryTmp[3].replace('</li>', '').strip(' ')
 		sDT = sData.split('发片日期是')[1][0:10]
+		print '发片日期 [' + sDT + ']'
 		sName = aryTmp[7].replace('</li>', '').replace('别名：', '').strip(' ')#.replace('\n', '')
 		sInfo = sData.split('<div class="showInfo">')[1].split('</div>')[0].strip(' ')
 		nDur = 0

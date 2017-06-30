@@ -54,7 +54,8 @@ class C1sdy:
 	def GetAllPage(self):
 	#{
 		# for nPageName in range(86, 513):
-		for nPageName in range(86, 88):
+		# for nPageName in range(86, 88):
+		for nPageName in range(88, 100):
 		#{
 			a = COneActor(nPageName, g_mysql, s3, '/app/srv_api/Tools/worm_1sdy/data/')
 			a.GetAndParse()

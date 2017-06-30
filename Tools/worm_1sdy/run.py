@@ -57,7 +57,7 @@ class C1sdy:
 		#{
 			a = COneActor(nPageName, g_mysql, s3, '/app/srv_api/Tools/worm_1sdy/data/')
 			a.GetAndParse()
-			break
+			# break
 		#}
 	#}
     #

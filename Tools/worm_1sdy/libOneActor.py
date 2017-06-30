@@ -262,9 +262,20 @@ class COneActor:
 		print '        -> ' + sCmd
 		os.system(sCmd)
 
-		self.m_s3.Object('avbus-data', 'covers/%d/'%(nActorID) + sProgramNo + '.jpg').put(Body=open(self.m_sActorDir + sProgramNo + '.jpg', 'rb'), ACL='public-read')
+		try:
+		#{
+			self.m_s3.Object('avbus-data', 'covers/%d/'%(nActorID) + sProgramNo + '.jpg').put(Body=open(self.m_sActorDir + sProgramNo + '.jpg', 'rb'), ACL='public-read')
+		#}
+		except:
+		#{
+			print 'except: upload: ' + self.m_sActorDir + sProgramNo + '.jpg'
+		#}
 
 		# add to mysql
+		sDT = sDT.strip()
+		sDT = sDT.strip('\r')
+		sDT = sDT.strip('\n')
+
 		aryDT = sDT.split('-')
 		nYear = 1900
 		nMonth = 1
@@ -278,6 +289,23 @@ class COneActor:
 		except:
 		#{
 			print 'except: ' + sDT
+		#}
+		if nYear == 1900:
+		#{
+			try:
+			#{
+				aryDT = sDT.split('年')
+				if len(aryDT) > 0:
+					nYear = aryDT[0]
+				if len(aryDT) > 1:
+					nMonth = aryDT[1]
+				if len(aryDT) > 2:
+					nDay = aryDT[2]
+			#}
+			except:
+			#{
+				print 'except: ' + sDT
+			#}
 		#}
 		sSql = 'insert into programs(number, actor_id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company, online, cover) values("'\
 			   + sProgramNo + '", ' + str(nActorID) + ', "' + sActorName + '", "' + sProgramName + '", %d, %d, %d, %d'%(nDur, nYear, nMonth, nDay) + ', "-", 1, "covers/%d/'%(nActorID) + sProgramNo + '.jpg")'

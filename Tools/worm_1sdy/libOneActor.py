@@ -296,11 +296,11 @@ class COneActor:
 			#{
 				aryDT = sDT.split('年')
 				if len(aryDT) > 0:
-					nYear = aryDT[0]
+					nYear = int(aryDT[0])
 				if len(aryDT) > 1:
-					nMonth = aryDT[1]
+					nMonth = int(aryDT[1])
 				if len(aryDT) > 2:
-					nDay = aryDT[2]
+					nDay = int(aryDT[2])
 			#}
 			except:
 			#{

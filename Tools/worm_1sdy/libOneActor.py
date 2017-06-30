@@ -269,8 +269,8 @@ class COneActor:
 		sSql = 'insert into programs(number, actor_id, actor, name, dur, releaseYear, releaseMonth, releaseDay, company, online, cover) values("'\
 			   + sProgramNo + '", ' + str(nActorID) + ', "' + sActorName + '", "' + sProgramName + '", ' + str(nDur) + ', ' + aryDT[0] + ', ' + aryDT[1] + ', ' + aryDT[2] + ', "-", 1, "covers/%d/'%(nActorID) + sProgramNo + '.jpg")'
 		print sSql
-		cur.execute(sSql)
-		conn.commit()
+		# cur.execute(sSql)
+		# conn.commit()
 	#}
 #}
 #

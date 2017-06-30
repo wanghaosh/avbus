@@ -66,28 +66,30 @@ class COneActor:
 			#{
 				sUri = '%d-%d.html' % (self.m_nFirstPageIndex, nPageIndex)
 			#}
-			# print sUri
-			bRetryCount = 5
-			nPageIndex = -1
-			while bRetryCount > 0:
-			# {
-				try:
-				# {
-					nPageIndex = self._OnePage(sUri)
-					print 'NextPage [%d]'%(nPageIndex)
-					break
-				# }
-				except:
-				# {
-					info = sys.exc_info()
-					print str(info)
 
-					print traceback.format_exc()
-
-					print 'Except[%d]: '%(bRetryCount) + sUri
-					bRetryCount -= 1
-				# }
-			#}
+			# bRetryCount = 5
+			# nPageIndex = -1
+			# while bRetryCount > 0:
+			# # {
+			# 	try:
+			# 	# {
+			# 		nPageIndex = self._OnePage(sUri)
+			# 		print 'NextPage [%d]'%(nPageIndex)
+			# 		break
+			# 	# }
+			# 	except:
+			# 	# {
+			# 		info = sys.exc_info()
+			# 		print str(info)
+            #
+			# 		print traceback.format_exc()
+            #
+			# 		print 'Except[%d]: '%(bRetryCount) + sUri
+			# 		bRetryCount -= 1
+			# 	# }
+			# #}
+			nPageIndex = self._OnePage(sUri)
+			print 'NextPage [%d]' % (nPageIndex)
 		#}
 	#}
 

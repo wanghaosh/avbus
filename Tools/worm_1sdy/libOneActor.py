@@ -32,121 +32,100 @@ import subprocess
 import boto3
 # import botocore
 import traceback
+from libHttp import CHttp
 # g_log = CLog()
 # g_log.Init('/logs/cdnChecker.log', '1')
-conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
-cur = conn.cursor()
+# conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+# cur = conn.cursor()
 
-s3 = boto3.resource('s3')
+# s3 = boto3.resource('s3')
 
-
-class CHttp:
+class COneActor:
 #{
-	@staticmethod
-	def HttpGet(sUri):
-	#{
-		# try:
-		# #{
-		resp = urllib2.urlopen(sUri)
-
-		if resp.getcode() != 200:
-		#{
-			print resp.getcode()
-			return None
-		#}
-		return resp.read()
-		#}
-		# except:
-		# #{
-	 #		info = sys.exc_info()
-	 #		print info 
-	 #		return None
-		# #}
-	#}
-
-	@staticmethod
-	def HttpPost(sUri, dictData):
-	#{
-		sDataEncode = urllib.urlencode(dictData)
-		req = urllib2.Request(url = sUri, data=sDataEncode)
-		resp = urllib2.urlopen(req)
-		if resp.getcode() != 200:
-		#{
-			return None
-		#}
-		return resp.read()
-	#}
-#}
-
-# def GetOnePage():
-# #{
-	
-# #}
-
-class C1sdy:
-#{
-	def __init__(self):
+	def __init__(self, nFirstPageIndex, aryMysql):
 	#{
 		self.m_sBaseURI = 'http://www.1sdy.com/topiclist/'
-		self.m_dictActors = {}
+		self.m_nFirstPageIndex = nFirstPageIndex
+
+		self.m_sActorName = ''
+		self.m_sActorPicUri = ''
+		self.m_sActorInfo = ''
+
+		self.m_aryMySQL = aryMysql
 	#}
 
-	def GetAllPage(self):
+	def GetAndParse(self):
 	#{
-		# for nPageName in range(86, 513):
-		for nPageName in range(173, 513):
+		nPageIndex = 0
+		while nPageIndex >= 0:
 		#{
-			nPageIndex = 0
-			while nPageIndex >= 0:
+			if nPageIndex == 0:
 			#{
-				if nPageIndex == 0:
-				#{
-					sUri = '%d.html'%(nPageName)
-				#}
-				else:
-				#{
-					sUri = '%d-%d.html' % (nPageName, nPageIndex)
-				#}
-
-				bRetry = True
-				while bRetry:
-				# {
-					bRetry = False
-					try:
-					# {
-						nPageIndex = self.GetOnePage(sUri)
-					# }
-					except:
-					# {
-						print 'Except: ' + sUri
-						bRetry = True
-					# }
-				#}
+				sUri = '%d.html'%(self.m_nFirstPageIndex)
 			#}
-			# break
+			else:
+			#{
+				sUri = '%d-%d.html' % (self.m_nFirstPageIndex, nPageIndex)
+			#}
+			# print sUri
+			bRetryCount = 5
+			nPageIndex = -1
+			while bRetryCount > 0:
+			# {
+				try:
+				# {
+					nPageIndex = self._OnePage(sUri)
+					print 'NextPage [%d]'%(nPageIndex)
+					break
+				# }
+				except:
+				# {
+					info = sys.exc_info()
+					print str(info)
+
+					print traceback.format_exc()
+
+					print 'Except[%d]: '%(bRetryCount) + sUri
+					bRetryCount -= 1
+				# }
+			#}
 		#}
-		sData = json.dumps(self.m_dictActors, ensure_ascii=False)
-		f = open('data_1sdy.json', 'w')
-		f.write(sData)
-		f.close()
 	#}
 
-	def GetOnePage(self, sPageName):
+	def _downloadPageFile(self, sUri, sPageName):
 	#{
+		sCmd = 'curl -o "' + sPageName + '" --referer "http://www.1sdy.com" "' + sUri + '" -A "Mozilla/5.0 (Windows NT 6.1)"'
+		print sCmd
+		os.system(sCmd)
+	#}
+
+	def _parseActorBaseInfo(self, sData):
+	#{
+		self.m_sActorName = sData.split('<title>')[1].split('所有作品番号')[0]
+		self.m_sActorPicUri = sData.split('.html"><img src="')[1].split('">')[0]
+		self.m_sActorInfo = sData.split('简介</a>')[1].split('</div>')[0].replace('<br />', '\n').replace('<div class="u">', '').replace('</br>', '')
+
+		print self.m_sActorName + ' : ' + self.m_sActorPicUri
+	#}
+
+	def _OnePage(self, sPageName):
+	#{
+		print ' '
+		print ' '
 		print '-------------------------------'
 		sUri = self.m_sBaseURI + sPageName
 		print sUri
+
+		# self._downloadPageFile(sUri, sPageName)
+
+		#
 		sData = CHttp.HttpGet(sUri)
-		# print sData
-		sActor = sData.split('<title>')[1].split('所有作品番号')[0]
-		# print sActor
-		sPic = sData.split('.html"><img src="')[1].split('">')[0]
-		# print '    -> ' + sPic
 
-		sDetail = sData.split('简介</a>')[1].split('</div>')[0].replace('<br />', '\n').replace('<div class="u">', '').replace('</br>', '')
-		# print sDetail
+		self._parseActorBaseInfo(sData)
+		# return -1
 
-		nActorID = self.AddActor(sActor, sPic, sDetail)
+		nActorID = self._addActor2MySQL(self.m_sActorName, self.m_sActorPicUri, self.m_sActorInfo)
+		return -1
 
 		aryProgramsTmp = sData.split('<div class="showPlay">')[1].split('<a href="')#.split('.html" target="_blank"><img src="')
 		for sTmp in aryProgramsTmp:
@@ -188,8 +167,11 @@ class C1sdy:
 		self.AddProgram(nActorID, sActor, sName.strip(' '), sNo, sCoverPic, sInfo.strip(' '), sDT.strip(' '))
 	#}
 
-	def AddActor(self, sActor, sActorPic, sDetail, cur, conn):
+	def _addActor2MySQL(self, sActor, sActorPic, sDetail):
 	#{
+		conn = self.m_aryMySQL[0]
+		cur = self.m_aryMySQL[1]
+
 		print sActor + ' : ' + sActorPic
 		# print '  -> ' + sDetail
 		if self.m_dictActors.has_key(sActor) is False:
@@ -223,7 +205,7 @@ class C1sdy:
 		else:
 		#{
 			# 数据库中没有同名演员
-			sSql = 'insert into actors(name, alias, detail, cover_pic, status, program_count) values("' + sActor + '", "-", "' + sDetail + '", "' + sActorPic + '", 1, 0)'
+			sSql = 'insert into actors(name, alias, detail, cover_pic, status, program_count, src_site) values("' + sActor + '", "-", "' + sDetail + '", "' + sActorPic + '", 1, 0, "www.1sdy.com")'
 			print sSql
 			cur.execute(sSql)
 			conn.commit()

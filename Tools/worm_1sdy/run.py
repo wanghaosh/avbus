@@ -56,7 +56,7 @@ class C1sdy:
 		# for nPageName in range(86, 513):
 		# for nPageName in range(86, 88):
 		# for nPageName in range(89, 101):
-		for nPageName in range(372, 513):
+		for nPageName in range(515, 516):
 		#{
 			a = COneActor(nPageName, g_mysql, s3, '/app/srv_api/Tools/worm_1sdy/data/')
 			a.GetAndParse()

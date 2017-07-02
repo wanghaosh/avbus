@@ -58,7 +58,7 @@ def Main():
 			"type": "add",
 			"id": "VB%08d"%(r[0])
 		}
-		if bFirst:
+		if bFirst is False:
 		#{
 			f.write(',\n')
 			bFirst = False

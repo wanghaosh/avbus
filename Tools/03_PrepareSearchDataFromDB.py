@@ -38,7 +38,9 @@ def Main():
 	sfn = 'dbR_%02d.txt'%(nFIndex)
 	print sfn
 	f = open(sfn, 'w')
+	f.write('[')
 	nCount = 0
+	bFirst = True
 	for r in datas:
 	#{
 		jsItem = {
@@ -56,18 +58,27 @@ def Main():
 			"type": "add",
 			"id": "VB%08d"%(r[0])
 		}
-		f.write(json.dumps(jsItem, ensure_ascii=False) + ',\n')
+		if bFirst:
+		#{
+			f.write(',\n')
+			bFirst = False
+		#}
+		f.write(json.dumps(jsItem, ensure_ascii=False))
 		nCount += 1
 		if nCount % 15000 == 0:
 		#{
 			nFIndex += 1
+			f.write(']')
 			f.close()
 
 			sfn = 'dbR_%02d.txt' % (nFIndex)
 			print sfn
+			bFirst = True
 			f = open(sfn, 'w')
+			f.write('[')
 		#}
 	#}
+	f.write(']')
 	f.close()
 
 	cur.close()

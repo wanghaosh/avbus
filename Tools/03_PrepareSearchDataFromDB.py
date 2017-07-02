@@ -71,6 +71,10 @@ def Main():
 			f.write(']')
 			f.close()
 
+			sCmd = 'aws cloudsearchdomain --endpoint-url http://search-avbus-v1-gnsia355htzip3dgfvzas52rda.ap-southeast-1.cloudsearch.amazonaws.com upload-documents --content-type application/json --documents dbR_00.txt'
+			print sCmd
+			os.system(sCmd)
+
 			sfn = 'dbR_%02d.txt' % (nFIndex)
 			print sfn
 			bFirst = True

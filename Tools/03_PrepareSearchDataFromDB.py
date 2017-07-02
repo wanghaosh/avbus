@@ -29,7 +29,10 @@ def Main():
 
 	sSql = 'select id, number, actor, name, dur, releaseYear, releaseMonth, releaseDay, company from programs'
 
-	datas = cur.execute(sSql)
+	cur.execute(sSql)
+
+
+	datas = cur.fetchall()
 
 	nFIndex = 0
 	f = open('dbR_%02d.txt'%(nFIndex), 'w')

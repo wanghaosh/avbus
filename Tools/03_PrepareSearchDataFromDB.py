@@ -61,8 +61,8 @@ def Main():
 		if bFirst is False:
 		#{
 			f.write(',\n')
-			bFirst = False
 		#}
+		bFirst = False
 		f.write(json.dumps(jsItem, ensure_ascii=False))
 		nCount += 1
 		if nCount % 15000 == 0:

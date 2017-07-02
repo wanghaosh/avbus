@@ -35,7 +35,9 @@ def Main():
 	datas = cur.fetchall()
 
 	nFIndex = 0
-	f = open('dbR_%02d.txt'%(nFIndex), 'w')
+	sfn = 'dbR_%02d.txt'%(nFIndex)
+	print sfn
+	f = open(sfn, 'w')
 	nCount = 0
 	for r in datas:
 	#{
@@ -61,7 +63,9 @@ def Main():
 			nFIndex += 1
 			f.close()
 
-			f = open('dbR_%02d.txt'%(nFIndex), 'w')
+			sfn = 'dbR_%02d.txt' % (nFIndex)
+			print sfn
+			f = open(sfn, 'w')
 		#}
 	#}
 	f.close()

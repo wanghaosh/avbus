@@ -56,12 +56,12 @@ def Main():
 		}
 		f.write(json.dumps(jsItem, ensure_ascii=False) + ',\n')
 		nCount += 1
-		if nCount % 20000 == 0:
+		if nCount % 15000 == 0:
 		#{
 			nFIndex += 1
 			f.close()
 
-			f.open('dbR_%02d.txt'%(nFIndex), 'w')
+			f = open('dbR_%02d.txt'%(nFIndex), 'w')
 		#}
 	#}
 	f.close()

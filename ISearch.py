@@ -6,62 +6,12 @@ avbus555 web api service
 """
 
 import json
-# import base64
-# import datetime
-# import time
-# import urllib2
-# import urllib
 import sys
 
-from gevent import monkey
-# from gevent.pywsgi import WSGIServer
-# monkey.patch_all()
 
 import mysql.connector
-# from Crypto.Cipher import AES
-# from binascii import b2a_hex, a2b_hex
-# import zlib
-import urllib2
-# import urllib
-from libAES import encrypt
-from libAES import decrypt
 from libWordFilter import CWordFilter
-from libMemC import CMemCached
-from libLog import CLog
 import boto3
-# from libUser import CUser
-#
-# def badWordFilter(sData):
-# #{
-# 	sRet = sData
-# 	aryBadWords = [
-# 		[u'变态', '**'],
-# 		[u'轮奸', '**'],
-# 		[u'调教', '**'],
-# 		[u'孕汁', '**'],
-# 		[u'痴女', '**'],
-# 		[u'巨乳', '**'],
-# 		[u'调教', '**'],
-# 		[u'尻', '*'],
-# 		[u'中出', '**'],
-# 		[u'FUCK', '****'],
-# 		[u'拘束', '**'],
-# 		[u'爆乳', '**'],
-# 		[u'淫', '*'],
-# 		[u'肛', '*'],
-# 		[u'阴', '*'],
-# 		[u'潮吹', '**'],
-# 		[u'奴隶', '**'],
-# 		[u'性奴', '**'],
-# 		[u'监禁', '**']
-# 	]
-# 	for bw in aryBadWords:
-# 	#{
-# 		# print bw
-# 		sRet = sRet.replace(bw[0], bw[1])
-# 	#}
-# 	return sRet
-# #}
 
 def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	"""
@@ -70,31 +20,13 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 #{
 	csd = boto3.client('cloudsearchdomain', endpoint_url='http://search-avbus-v1-gnsia355htzip3dgfvzas52rda.ap-southeast-1.cloudsearch.amazonaws.com')
 
-	aryData = []
 	if sProgramName:
 	#{
-		res = csd.search(query=sProgramName, queryOptions='{"fields": ["name"]}', size=nMaxCount)
-
-		for hit in res['hits']['hit']:
-		#{
-			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
-			# sID = hit['fields']['id'][0]
-			sID = hit['fields']['no'][0]
-			aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
-		#}
+		return _searchProgram(sProgramName, nMaxCount, csd)
 	#}
 	if sActor:
 	#{
-		res = csd.search(query=sActor, queryOptions='{"fields": ["actor"]}', size=nMaxCount)
-
-		for hit in res['hits']['hit']:
-		# {
-			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
-			# sID = hit['fields']['id'][0]
-			sID = hit['fields']['no'][0]
-			aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
-
-		# }
+		return _searchActor(sActor, nMaxCount, csd)
 	#}
 	jsRet = {
 		"result" : "+OK",
@@ -106,24 +38,93 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	# return '{"result": "-ERR", "msg": "Not Found Data."}'
 #}
 
-# def encrypt(sData, sKey, sIV=b'0000000000000000'):
-# #{
-# 	mode = AES.MODE_CBC
-# 	encryptor = AES.new(sKey, mode, sIV)
-# 	nAddLen = 16 - (len(sData) % 16)
-# 	sData = sData + ('\0' * nAddLen)
-# 	sRet = encryptor.encrypt(sData)
-# 	return b2a_hex(sRet)
-# #}
-#
-# def decrypt(sData, sKey, sIV = b'0000000000000000'):
-# #{
-# 	sData = a2b_hex(sData)
-# 	mode = AES.MODE_CBC
-# 	decryptor = AES.new(sKey, mode, sIV)
-# 	sRet = decryptor.decrypt(sData)
-# 	return sRet.rstrip('\0')
-# #}
+def _searchProgram(sKeyword, nMaxCount, csd):
+#{
+	res = csd.search(query=sKeyword, queryOptions='{"fields": ["name"]}', size=nMaxCount)
+
+	aryData = []
+
+	for hit in res['hits']['hit']:
+	# {
+		sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
+		# sID = hit['fields']['id'][0]
+		sID = hit['fields']['no'][0]
+		aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})  # hit['fields']['name'][0]})
+	# }
+	jsRet = {
+		"result" : "+OK",
+		"items": aryData
+	}
+	sRet = json.dumps(jsRet, ensure_ascii=False)
+	return sRet
+#}
+
+def _searchActor(sKeyword, nMaxCount, csd):
+#{
+	res = csd.search(query=sKeyword, queryOptions='{"fields": ["actor"]}', size=nMaxCount)
+
+	# aryData = []
+	# 先搜索节目
+	dictProgramIDs = {}
+	for hit in res['hits']['hit']:
+	# {
+		sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
+		# sID = hit['fields']['id'][0]
+		sID = hit['fields']['no'][0]
+		# aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})  # hit['fields']['name'][0]})
+		if dictProgramIDs.has_key(sID) is False:
+		#{
+			dictProgramIDs[sID] = {}
+		#}
+		dictProgramIDs[sID]['pid'] = sID
+		dictProgramIDs[sID]['count'] += 1
+	# }
+
+	conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
+	cur = conn.cursor()  # 从数据库中取出这些节目对应的演员id
+
+	aryActors = []
+	for (sID, v) in dictProgramIDs.items():
+	#{
+		sSql = 'select number, actor_id from programs where id=' + str(v['pid'])
+
+		cur.execute(sSql)
+		res = cur.fetchall()
+
+		for r in res:
+		#{
+			aid = res[1]
+			sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+			cur.execute(sSql)
+			res = cur.fetchall()
+			for r in res:
+			#{
+				rec = {
+					"id": r[0],
+					"actor": r[1],
+					"alias": r[2],
+					"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg" % (r[0]),
+					"programcount": r[3]
+				}
+				# print rec
+				aryActors.append(rec)
+			#}
+			break
+		#}
+	#}
+
+	cur.close()
+	conn.close()
+
+	jsRet = {
+		"result": "+OK",
+		"actorcount": len(aryActors),
+		"actors": aryActors,
+		"mode": "db"
+	}
+	sRet = json.dumps(jsRet, ensure_ascii=False)
+	return sRet
+#}
 
 #-------------------------------------------------------#
 if __name__ == '__main__':

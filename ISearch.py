@@ -61,7 +61,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 
 def _searchActor(sKeyword, nMaxCount, csd):
 #{
-	res = csd.search(query=sKeyword, queryOptions='{"fields": ["actor"]}', size=nMaxCount)
+	res = csd.search(query=sKeyword, queryOptions='{"fields": ["actor"]}', size=nMaxCount * 100)
 
 	# aryData = []
 	# 先搜索节目

@@ -70,7 +70,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	# {
 		sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 		# sID = hit['fields']['id'][0]
-		sID = hit['fields']['no'][0]
+		sID = hit['fields']['id'][0]
 		# aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})  # hit['fields']['name'][0]})
 		if dictProgramIDs.has_key(sID) is False:
 		#{
@@ -88,6 +88,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	for (sID, v) in dictProgramIDs.items():
 	#{
 		sSql = 'select number, actor_id from programs where id=' + str(v['pid'])
+		print sSql
 
 		cur.execute(sSql)
 		res = cur.fetchall()

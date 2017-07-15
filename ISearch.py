@@ -29,14 +29,8 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	#{
 		return _searchActor(sActor, nMaxCount, csd)
 	#}
-	jsRet = {
-		"result" : "+OK",
-		"items": aryData
-	}
-	sRet = json.dumps(jsRet, ensure_ascii=False)
-	return sRet
 
-	# return '{"result": "-ERR", "msg": "Not Found Data."}'
+	return '{"result": "-ERR", "msg": "Not Found Data."}'
 #}
 
 def _searchProgram(sKeyword, nMaxCount, csd):

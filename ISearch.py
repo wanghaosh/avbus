@@ -63,7 +63,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 def _searchActor(sKeyword, nMaxCount, csd):
 #{
 	mem = CMemCached()
-	sKey = 'searchactor_' + sKeyword + '_%d'(nMaxCount)
+	sKey = 'searchactor_' + sKeyword + '_%d'%(nMaxCount)
 	sKey = sKey.encode('utf-8')
 	sRet = mem.Get(sKey)
 	if sRet:

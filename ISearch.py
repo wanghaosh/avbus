@@ -75,6 +75,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 		if dictProgramIDs.has_key(sID) is False:
 		#{
 			dictProgramIDs[sID] = {}
+			dictProgramIDs[sID]['count'] = 0
 		#}
 		dictProgramIDs[sID]['pid'] = sID
 		dictProgramIDs[sID]['count'] += 1

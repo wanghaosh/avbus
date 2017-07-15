@@ -87,6 +87,9 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	aryActors = []
 	for (sID, v) in dictProgramIDs.items():
 	#{
+		print ' '
+		print ' '
+		print '-------------'
 		sSql = 'select number, actor_id from programs where id=' + str(v['pid'])
 		print sSql
 
@@ -95,8 +98,9 @@ def _searchActor(sKeyword, nMaxCount, csd):
 
 		for r in res:
 		#{
-			aid = res[1]
+			aid = r[1]
 			sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+			print '    -> ' + sSql
 			cur.execute(sSql)
 			res = cur.fetchall()
 			for r in res:

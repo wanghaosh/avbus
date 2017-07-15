@@ -73,52 +73,37 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	aryData = []
 	if sProgramName:
 	#{
-		res = csd.search(query=sProgramName, size=nMaxCount)
-		# nFoundCount = res['hits']['found']
+		res = csd.search(query=sProgramName, queryOptions='{"fields": ["name"]}', size=nMaxCount)
 
 		for hit in res['hits']['hit']:
 		#{
-			# print '-----------------------------'
-			# print hit['fields']
-			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
-			sID = hit['fields']['id'][0]
-			# sNo = hit['fields']['no'][0]
-			#sNo = encrypt(sNo, 'avbus555fhzidian')
+			# sID = hit['fields']['id'][0]
+			sID = hit['fields']['no'][0]
 			aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})#hit['fields']['name'][0]})
 		#}
-		jsRet = {
-			"result" : "+OK",
-			"items": aryData
-		}
-		sRet = json.dumps(jsRet, ensure_ascii=False)
-		return sRet
 	#}
 	if sActor:
 	#{
-		res = csd.search(query=sActor, size=nMaxCount)
+		res = csd.search(query=sActor, queryOptions='{"fields": ["actor"]}', size=nMaxCount)
+
 		for hit in res['hits']['hit']:
 		# {
-			#print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
-			# print '-----------------------------'
-			# print hit['fields']
-			# print hit['fields']['no'][0] + ' : ' + hit['fields']['actor'][0] + ' : ' + hit['fields']['name'][0]
 			sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
-			sID = hit['fields']['id'][0]
-			# sNo = hit['fields']['no'][0]
-			#sNo = encrypt(sNo, 'avbus555fhzidian')
+			# sID = hit['fields']['id'][0]
+			sID = hit['fields']['no'][0]
 			aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})# hit['fields']['name'][0]})
 
 		# }
-		jsRet = {
-			"result" : "+OK",
-			"items": aryData
-		}
-		sRet = json.dumps(jsRet, ensure_ascii=False)
-		return sRet
 	#}
+	jsRet = {
+		"result" : "+OK",
+		"items": aryData
+	}
+	sRet = json.dumps(jsRet, ensure_ascii=False)
+	return sRet
 
-	return '{"result": "-ERR", "msg": "Not Found Data."}'
+	# return '{"result": "-ERR", "msg": "Not Found Data."}'
 #}
 
 # def encrypt(sData, sKey, sIV=b'0000000000000000'):

@@ -87,18 +87,31 @@ select * from programs where id&gt;172678;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from actors</string>
+		<string>select count(*) from actors</string>
+		<string>select count(*) from programs where online=1</string>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where id&gt;174501</string>
+		<string>select * from actors where id=713</string>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where id&gt;173609</string>
+		<string>delete from programs where id&gt;173609</string>
+		<string>-- update actors set src_site='www.99fanhao.com';
+
+select * from programs where id&gt;173101</string>
 		<string>-- update actors set src_site='www.99fanhao.com';
 
 select * from programs where id&gt;172678</string>
 		<string>delete from programs where id&gt;172678</string>
-		<string>select * from actors where id=713</string>
+		<string>select count(*) from programs</string>
 		<string>-- update actors set src_site='www.99fanhao.com';
 
 select * from programs where actor_id='713'</string>
 		<string>-- update actors set src_site='www.99fanhao.com';
 
 select * from programs limit 10</string>
-		<string>select * from actors</string>
 		<string>update actors set src_site='www.99fanhao.com'</string>
 		<string>SELECT LAST_INSERT_ID()</string>
 		<string>select @@IDENTITY</string>
@@ -106,13 +119,6 @@ select * from programs limit 10</string>
 		<string>select @@identiry</string>
 		<string>select * from actors where name like '%小百合%'</string>
 		<string>select * from actors where name like '%片野%'</string>
-		<string>select actor_id, count(*) from programs group by actor_id</string>
-		<string>update actors set program_count=(select count(*) from programs where actor_id=actors.id)</string>
-		<string>update actors set program_count=(select count(*) from programs group by actor_id) where id=program.actor_id</string>
-		<string>update actors set program_count=(select count(*) from programs as T group by actor_id) where id=T.actor_id</string>
-		<string>update actors set program_count=(select count(*) from programs where id=actor_id)</string>
-		<string>select * from programs where id='71320'</string>
-		<string>select * from programs limit 1000</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

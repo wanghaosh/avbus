@@ -8,10 +8,11 @@ avbus555 web api service
 import json
 import sys
 
-
 import mysql.connector
 from libWordFilter import CWordFilter
 import boto3
+
+from libMemC import CMemCached
 
 def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 	"""
@@ -61,6 +62,16 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 
 def _searchActor(sKeyword, nMaxCount, csd):
 #{
+	mem = CMemCached()
+	sKey = 'searchactor_' + sKeyword + '_%d'(nMaxCount)
+	sKey = sKey.encode('utf-8')
+	sRet = mem.Get(sKey)
+	if sRet:
+	#{
+		sRet = sRet.replace('"mode": "db"', '"mode": "mem"')
+		return sRet
+	#}
+
 	res = csd.search(query=sKeyword, queryOptions='{"fields": ["actor"]}', size=nMaxCount * 10)
 
 	# aryData = []
@@ -135,6 +146,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 		"mode": "db"
 	}
 	sRet = json.dumps(jsRet, ensure_ascii=False)
+	mem.Set(sKey, sRet, 3600 * 24)
 	return sRet
 #}
 

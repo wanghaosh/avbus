@@ -85,6 +85,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	cur = conn.cursor()  # 从数据库中取出这些节目对应的演员id
 
 	aryActors = []
+	dictActorIDs = {}
 	for (sID, v) in dictProgramIDs.items():
 	#{
 		print ' '
@@ -99,6 +100,11 @@ def _searchActor(sKeyword, nMaxCount, csd):
 		for r in res:
 		#{
 			aid = r[1]
+			if dictActorIDs.has_key(aid):
+			#{
+				break
+			#}
+			dictActorIDs[aid] = True
 			sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
 			print '    -> ' + sSql
 			cur.execute(sSql)

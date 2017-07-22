@@ -123,7 +123,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	dictActorIDs = {}
 	for (sID, v) in dictProgramIDs.items():
 	#{
-		aid = _getActorIDFromProgramID(v['pid'])
+		aid = _getActorIDFromProgramID(v['pid'], mem, cur)
 		if aid:
 		#{
 			if dictActorIDs.has_key(aid):

@@ -135,6 +135,8 @@ def _IGetActorList(nPageIndex, nPageSize, log):
 	interface: get actor list(full)
 	"""
 #{
+	log.Info('_IGetActorList|%d|%d'%(nPageIndex, nPageSize))
+
 	mem = CMemCached()
 	sKey = 'api_getactorlist_%d_%d'%(nPageIndex, nPageSize)
 	sKey = sKey.encode('utf-8')

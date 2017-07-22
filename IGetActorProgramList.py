@@ -38,6 +38,7 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	if sActor is None and sActorID is None:
 		return '{"result": "-ERR", "msg": "not fount parameter [actor/actorid]"}'
 
+	log.Info('_IGetActorProgramList|' + sActor + '|' + sActorID + '|%d|%d'%(nPageIndex, nPageSize))
 	sMode = 'mem'
 	mem = CMemCached()
 	sKey = ''

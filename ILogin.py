@@ -49,6 +49,7 @@ def _ILogin(sToken, log):
 	sToken = sToken.replace(' ', '')
 	sToken = sToken.split('}')[0] + '}'
 	jsToken = json.loads(sToken)
+	log.Info('_ILogin|' + sToken)
 	# #}
 	# except:
 	# #{
@@ -71,7 +72,7 @@ def _ILogin(sToken, log):
 	if jsToken.has_key('v') is False:
 		return '{"result": "-ERR", "msg": "illegl token 4", "errcode": "E007"}'
 
-	log.Info('login|' + json.dumps(jsToken, ensure_ascii=False))
+	# log.Info('login|' + json.dumps(jsToken, ensure_ascii=False))
 
 	nVer = int(jsToken['v'])
 	jsRet = {

@@ -23,10 +23,12 @@ def _ISearch(sToken, sActor, sProgramName, nMaxCount, log):
 
 	if sProgramName:
 	#{
+		log.Info('_ISearch|program|' + sProgramName + '|%d'%(nMaxCount))
 		return _searchProgram(sProgramName, nMaxCount, csd)
 	#}
 	if sActor:
 	#{
+		log.Info('_ISearch|actor|' + sActor + '|%d'%(nMaxCount))
 		return _searchActor(sActor, nMaxCount, csd)
 	#}
 

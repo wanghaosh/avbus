@@ -126,6 +126,7 @@ def _IGetYearsProgramList(sToken, nYear, nPageIndex, nPageSize, log):
 	interface
 	"""
 #{
+	log.Info('_IGetYearsProgramList|%d|%d|%d'%(nYear, nPageIndex, nPageSize))
 	# mem = CMemCached()
 	# sKey = 'api_getactorlist'
 	# sKey = sKey.encode('utf-8')

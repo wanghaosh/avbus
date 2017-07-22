@@ -38,6 +38,7 @@ def _IProfile(sToken, log):
 
 	sToken = decrypt(sToken, 'avbus555fhzidian')
 
+	log.Info('_IProfile|' + sToken)
 	jsToken = None
 	try:
 	#{

@@ -49,6 +49,8 @@ def _IGetNo(sToken, sID, log):
 	sToken = sToken.replace(' ', '')
 	sToken = sToken.split('}')[0] + '}'
 	jsToken = json.loads(sToken)
+
+	log.Info('_IGetNo|' + sToken)
 	# #}
 	# except:
 	# #{
@@ -62,7 +64,11 @@ def _IGetNo(sToken, sID, log):
 
 	user = CUser(jsToken['uid'])
 	if user.UsePoint(1) is False:
-		return '{"result": "-ERR", "msg": "积分不足，请明天再来（凌晨1点积分自动恢复）.", "errcode": "E005"}'
+	#{
+		sRet = '{"result": "-ERR", "msg": "积分不足，请明天再来（凌晨1点积分自动恢复）.", "errcode": "E005"}'
+		log.Info(sRet)
+		return sRet
+	#}
 
 	bDebug = False
 	if jsToken.has_key('debug') is True:

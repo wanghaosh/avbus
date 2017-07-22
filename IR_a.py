@@ -121,6 +121,7 @@ def _IR_a(aryActorIDs, log):
 	"""
 	"""
 #{
+	log.Info('_IR_a')
 	mem = CMemCached()
 	sKey = 'api_r_a'
 	sKey = sKey.encode('utf-8')

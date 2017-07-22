@@ -119,6 +119,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	sKey = 'searchactor_' + sKeyword + '_%d'%(nMaxCount)
 	sKey = sKey.encode('utf-8')
 	sRet = mem.Get(sKey)
+	sRet = None
 	if sRet:
 	#{
 		sRet = sRet.replace('"mode": "db"', '"mode": "mem"')

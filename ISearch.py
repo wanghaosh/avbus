@@ -158,7 +158,7 @@ def _searchActor(sKeyword, nMaxCount, csd):
 		#{
 			if dictActorIDs.has_key(aid):
 			#{
-				break
+				continue
 			#}
 
 			dictActorIDs[aid] = True

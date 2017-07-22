@@ -99,6 +99,7 @@ def _IGetNo(sToken, sID, log):
 		#try:
 		#{
 		sSql = 'select number from programs where id=' + sID
+		print sSql
 		cur.execute(sSql)
 		res = cur.fetchall()
 

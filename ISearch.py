@@ -46,7 +46,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 		sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 		# sID = hit['fields']['id'][0]
 		sID = hit['fields']['id'][0]
-		print hit['fields']
+		# print hit['fields']
 		aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})  # hit['fields']['name'][0]})
 	# }
 	jsRet = {
@@ -54,7 +54,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 		"items": aryData
 	}
 	sRet = json.dumps(jsRet, ensure_ascii=False)
-	print sRet
+	# print sRet
 	return sRet
 #}
 

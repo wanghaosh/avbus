@@ -53,6 +53,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 		"items": aryData
 	}
 	sRet = json.dumps(jsRet, ensure_ascii=False)
+	print sRet
 	return sRet
 #}
 

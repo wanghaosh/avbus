@@ -27,6 +27,7 @@ from libLog import CLog
 
 # from libUser import CUser
 
+from ILogin import _ILogin
 from IGetActorList import _IGetActorList
 from IGetActorProgramList import _IGetActorProgramList
 from IGetNo import _IGetNo
@@ -71,6 +72,13 @@ def getParam(request, sParamName, sDefaultValue):
 		return sDefaultValue
 	#}
 	return sParamValue
+#}
+
+@app.route('/api/login', methods=['POST'])
+def ILogin():
+#{
+	sToken = getParam(request, 'token', None)
+	return _ILogin(sToken)
 #}
 
 @app.route('/api/license', methods=['GET'])

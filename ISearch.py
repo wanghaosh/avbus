@@ -58,6 +58,32 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 	return sRet
 #}
 
+def _getActorIDFromProgramID(sPid, mem, cur):
+#{
+	sKey = 'pid_aid_' + sPid
+	sRet = mem.Get(sKey)
+	if sRet:
+	#{
+		return sRet
+	#}
+	print ' '
+	print ' '
+	print '-------------'
+	sSql = 'select number, actor_id from programs where id=' + sPid
+	print sSql
+
+	cur.execute(sSql)
+	res = cur.fetchall()
+
+	for r in res:
+	# {
+		aid = r[1]
+		mem.Set(sKey, str(aid), 3600 * 24)
+		return str(aid)
+	# }
+	return None
+#}
+
 def _searchActor(sKeyword, nMaxCount, csd):
 #{
 	mem = CMemCached()
@@ -97,29 +123,21 @@ def _searchActor(sKeyword, nMaxCount, csd):
 	dictActorIDs = {}
 	for (sID, v) in dictProgramIDs.items():
 	#{
-		print ' '
-		print ' '
-		print '-------------'
-		sSql = 'select number, actor_id from programs where id=' + str(v['pid'])
-		print sSql
-
-		cur.execute(sSql)
-		res = cur.fetchall()
-
-		for r in res:
+		aid = _getActorIDFromProgramID(v['pid'])
+		if aid:
 		#{
-			aid = r[1]
 			if dictActorIDs.has_key(aid):
 			#{
 				break
 			#}
+
 			dictActorIDs[aid] = True
 			sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
 			print '    -> ' + sSql
 			cur.execute(sSql)
 			res = cur.fetchall()
 			for r in res:
-			#{
+			# {
 				rec = {
 					"id": r[0],
 					"actor": r[1],
@@ -129,9 +147,43 @@ def _searchActor(sKeyword, nMaxCount, csd):
 				}
 				# print rec
 				aryActors.append(rec)
-			#}
-			break
+			# }
 		#}
+		# print ' '
+		# print ' '
+		# print '-------------'
+		# sSql = 'select number, actor_id from programs where id=' + str(v['pid'])
+		# print sSql
+        #
+		# cur.execute(sSql)
+		# res = cur.fetchall()
+        #
+		# for r in res:
+		# #{
+		# 	aid = r[1]
+		# 	if dictActorIDs.has_key(aid):
+		# 	#{
+		# 		break
+		# 	#}
+		# 	dictActorIDs[aid] = True
+		# 	sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+		# 	print '    -> ' + sSql
+		# 	cur.execute(sSql)
+		# 	res = cur.fetchall()
+		# 	for r in res:
+		# 	#{
+		# 		rec = {
+		# 			"id": r[0],
+		# 			"actor": r[1],
+		# 			"alias": r[2],
+		# 			"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg" % (r[0]),
+		# 			"programcount": r[3]
+		# 		}
+		# 		# print rec
+		# 		aryActors.append(rec)
+		# 	#}
+		# 	break
+		# #}
 	#}
 
 	cur.close()

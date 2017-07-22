@@ -93,7 +93,7 @@ def _getActorInfo(sActorID, mem, cur):
 		return json.loads(sActorInfo)
 	#}
 
-	sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+	sSql = 'select id, name, alias, program_count from actors where id=' + sActorID
 	print '    -> ' + sSql
 	cur.execute(sSql)
 	res = cur.fetchall()

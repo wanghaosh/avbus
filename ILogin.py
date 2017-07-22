@@ -69,7 +69,7 @@ def _ILogin(sToken, log):
 	# 	bDebug = jsToken['debug']
 
 	if jsToken.has_key('v') is False:
-		return '{"result": "-ERR", "msg": "illegl token 3", "errcode": "E007"}'
+		return '{"result": "-ERR", "msg": "illegl token 4", "errcode": "E007"}'
 
 	log.Info('login|' + json.dumps(jsToken, ensure_ascii=False))
 

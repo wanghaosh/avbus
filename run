@@ -26,6 +26,7 @@ restart)
   start
 ;;
 debug)
+  stop
   debug
 ;;
 *)

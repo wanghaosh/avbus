@@ -78,7 +78,7 @@ def getParam(request, sParamName, sDefaultValue):
 def ILogin():
 #{
 	sToken = getParam(request, 'token', None)
-	return _ILogin(sToken)
+	return _ILogin(sToken, g_log)
 #}
 
 @app.route('/api/license', methods=['GET'])

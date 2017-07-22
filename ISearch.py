@@ -84,6 +84,35 @@ def _getActorIDFromProgramID(sPid, mem, cur):
 	return None
 #}
 
+def _getActorInfo(sActorID, mem, cur):
+#{
+	sKey = 'actor_info_' + sActorID
+	sActorInfo = mem.Get(sKey)
+	if sActorInfo:
+	#{
+		return json.loads(sActorInfo)
+	#}
+
+	sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+	print '    -> ' + sSql
+	cur.execute(sSql)
+	res = cur.fetchall()
+	for r in res:
+	# {
+		rec = {
+			"id": r[0],
+			"actor": r[1],
+			"alias": r[2],
+			"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg" % (r[0]),
+			"programcount": r[3]
+		}
+		# print rec
+		mem.Set(sKey, json.dumps(rec, ensure_ascii=False))
+		return rec
+	# }
+	return None
+#}
+
 def _searchActor(sKeyword, nMaxCount, csd):
 #{
 	mem = CMemCached()
@@ -132,22 +161,27 @@ def _searchActor(sKeyword, nMaxCount, csd):
 			#}
 
 			dictActorIDs[aid] = True
-			sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
-			print '    -> ' + sSql
-			cur.execute(sSql)
-			res = cur.fetchall()
-			for r in res:
-			# {
-				rec = {
-					"id": r[0],
-					"actor": r[1],
-					"alias": r[2],
-					"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg" % (r[0]),
-					"programcount": r[3]
-				}
-				# print rec
-				aryActors.append(rec)
-			# }
+			jsActorInfo = _getActorInfo(aid, mem, cur)
+			if jsActorInfo:
+			#{
+				aryActors.append(jsActorInfo)
+			#}
+			# sSql = 'select id, name, alias, program_count from actors where id=' + str(aid)
+			# print '    -> ' + sSql
+			# cur.execute(sSql)
+			# res = cur.fetchall()
+			# for r in res:
+			# # {
+			# 	rec = {
+			# 		"id": r[0],
+			# 		"actor": r[1],
+			# 		"alias": r[2],
+			# 		"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg" % (r[0]),
+			# 		"programcount": r[3]
+			# 	}
+			# 	# print rec
+			# 	aryActors.append(rec)
+			# # }
 		#}
 		# print ' '
 		# print ' '

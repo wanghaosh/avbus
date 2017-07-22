@@ -54,7 +54,7 @@ def _IGetActorProgramList(sActor, sActorID, nPageIndex, nPageSize, log):
 	sKey = sKey.encode('utf-8')
 	sRet = mem.Get(sKey)
 
-	sRet = None
+	# sRet = None
 	if sRet == '' or sRet is None:
 	#{
 		sMode = 'db'

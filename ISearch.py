@@ -46,6 +46,7 @@ def _searchProgram(sKeyword, nMaxCount, csd):
 		sName = CWordFilter.badWordFilter(hit['fields']['name'][0])
 		# sID = hit['fields']['id'][0]
 		sID = hit['fields']['no'][0]
+		print hit['fields']
 		aryData.append({'no': sID, 'actor': hit['fields']['actor'][0], 'name': sName})  # hit['fields']['name'][0]})
 	# }
 	jsRet = {

@@ -99,6 +99,7 @@ class CUser:
 
 		if self.m_jsProfile['lastUsePointDT'] != lNow:
 		#{
+			print 'new days , set point = 10 : ' + self.m_jsProfile['uid']
 			self.m_jsProfile['point'] = 10
 		#}
 

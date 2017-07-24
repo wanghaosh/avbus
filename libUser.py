@@ -109,6 +109,7 @@ class CUser:
 			return False
 		#}
 		self.m_jsProfile['point'] -= nPoint
+		self.m_jsProfile['lastUsePointDT'] = lNow
 		self.SaveProfile()
 	#}
 #}

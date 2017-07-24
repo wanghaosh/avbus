@@ -17,6 +17,9 @@ from gevent import monkey
 # from gevent.pywsgi import WSGIServer
 monkey.patch_all()
 
+import urllib2
+import urllib
+
 # import mysql.connector
 # from Crypto.Cipher import AES
 # from binascii import b2a_hex, a2b_hex

@@ -134,7 +134,7 @@ def ISearchR():
 	:return:
 	"""
 #{
-	return '{"result": "+OK", "data": ["里美", "麻生希", "Rio", "三上悠", "上原亚衣", "julia", "冲田杏梨", "吉泽明步", "大桥未久", "小川阿佐美"]}'
+	return '{"result": "+OK", "data": ["里美", "麻生希", "Rio", "三上悠亚", "上原亚衣", "冲田杏梨", "吉泽明步", "大桥未久", "小川阿佐美"]}'
 #}
 
 @app.route('/api/r/a', methods=['GET'])

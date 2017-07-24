@@ -76,7 +76,7 @@ def _ILogin(sToken, log):
 
 	nVer = int(jsToken['v'])
 	jsRet = {
-		'lastVerCode': 4,
+		'lastVerCode': 1,
 		'lastVerURI': 'http://update.avbus.club/t',
 		'forceUpdate': 0
 	}

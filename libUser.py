@@ -7,7 +7,7 @@ avbus555 web api service
 
 import json
 # import base64
-# import datetime
+import datetime
 # import time
 # import urllib2
 # import urllib
@@ -24,7 +24,7 @@ from gevent import monkey
 # from libMemC import CMemCached
 from libLog import CLog
 import boto3
-import mysql.connector
+# import mysql.connector
 
 ################################
 # from flask import Flask
@@ -45,7 +45,8 @@ class CUser:
 		# self.m_sBucket = 'avline-data'
 		self.m_jsProfile = {
 			'uid': sUid,
-			'point': 0
+			'point': 0,
+			'lastUsePointDT': 20000101,
 			# 'no_view_count': 0
 		}
 		self.m_nNewUserPoint = 10
@@ -61,6 +62,10 @@ class CUser:
 		#{
 			item = response['Item']
 			self.m_jsProfile['point'] = item['point']
+			if item.has_key('lastUsePointDT'):
+			#{
+				self.m_jsProfile['lastUsePointDT'] = item['lastUsePointDT']
+			#}
 			print 'load from dynamodb: ' + str(self.m_jsProfile)
 		#}
 		else:
@@ -71,42 +76,6 @@ class CUser:
 
 			print 'new user dynamodb: ' + str(self.m_jsProfile)
 		#}
-
-        #
-		# conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
-		# cur = conn.cursor()
-		# try:
-		# # {
-		# 	sSql = 'select uid, point from users'
-		# 	print sSql
-		# 	cur.execute(sSql)
-		# 	res = cur.fetchall()
-        #
-		# 	bFound = False
-		# 	for r in res:
-		# 	# {
-		# 		self.m_jsProfile['point'] = r[1]
-		# 		bFound = True
-		# 		break
-		# 	# }
-		# 	if bFound is False:
-		# 	#{
-		# 		self.m_jsProfile['point'] = self.m_nNewUserPoint
-		# 		sSql = 'insert into users(uid, point) values ("' + self.m_jsProfile['uid'] + '", %d)'%(self.m_nNewUserPoint)
-		# 		print sSql
-		# 		cur.execute(sSql)
-		# 		conn.commit()
-		# 	#}
-		# 	cur.close()
-		# 	conn.close()
-        #
-		# # }
-		# except:
-		# # {
-		# 	print 'load Profile failed'
-		# 	cur.close()
-		# 	conn.close()
-		# # }
 	#}
 
 	def SaveProfile(self):
@@ -115,24 +84,6 @@ class CUser:
 		table = db.Table('avbus_users')
 
 		table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_jsProfile['point']})
-
-
-		# conn = mysql.connector.connect(user='avbus555', password='avbus555', host='avbus.c1dpvhbggytf.ap-southeast-1.rds.amazonaws.com', database='avbus')
-		# cur = conn.cursor()
-		# try:
-		# # {
-		# 	sSql = 'update users set point=%d'%(self.m_jsProfile['point']) + ' where uid="' + self.m_jsProfile['uid'] + '"'
-		# 	cur.execute(sSql)
-		# 	conn.commit()
-        #
-		# 	cur.close()
-		# 	conn.close()
-		# # }
-		# except:
-		# # {
-		# 	cur.close()
-		# 	conn.close()
-		# # }
 	#}
 
 	def GetPoint(self):
@@ -142,6 +93,15 @@ class CUser:
 
 	def UsePoint(self, nPoint):
 	#{
+		# 检查最后一次使用积分的时间，如果是前一天则自动将积分补足
+		dateNow = datetime.datetime.now()
+		lNow = dateNow.year * 10000 + dateNow.month * 100 + dateNow.day
+
+		if self.m_jsProfile['lastUsePointDT'] != lNow:
+		#{
+			self.m_jsProfile['point'] = 10
+		#}
+
 		if self.m_jsProfile['point'] < nPoint:
 		#{
 			print 'point: %d'%(self.m_jsProfile['point'])

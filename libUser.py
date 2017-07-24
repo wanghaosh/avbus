@@ -83,7 +83,7 @@ class CUser:
 		db = boto3.resource('dynamodb')
 		table = db.Table('avbus_users')
 
-		table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_jsProfile['point']})
+		table.put_item(Item={'uid': self.m_jsProfile['uid'], 'point': self.m_jsProfile['point'], 'lastUsePointDT': self.m_jsProfile['lastUsePointDT']})
 	#}
 
 	def GetPoint(self):

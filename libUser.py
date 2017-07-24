@@ -47,6 +47,7 @@ class CUser:
 			'uid': sUid,
 			'point': 0,
 			'lastUsePointDT': 20000101,
+			'vip': 0
 			# 'no_view_count': 0
 		}
 		self.m_nNewUserPoint = 10
@@ -65,6 +66,10 @@ class CUser:
 			if item.has_key('lastUsePointDT'):
 			#{
 				self.m_jsProfile['lastUsePointDT'] = item['lastUsePointDT']
+			#}
+			if item.has_key('vip'):
+			#{
+				self.m_jsProfile['vip'] = item['vip']
 			#}
 			print 'load from dynamodb: ' + str(self.m_jsProfile)
 		#}
@@ -93,6 +98,10 @@ class CUser:
 
 	def UsePoint(self, nPoint):
 	#{
+		if self.m_jsProfile['vip'] == 1:
+		#{
+			return True
+		#}
 		# 检查最后一次使用积分的时间，如果是前一天则自动将积分补足
 		dateNow = datetime.datetime.now()
 		lNow = dateNow.year * 10000 + dateNow.month * 100 + dateNow.day
@@ -111,5 +120,6 @@ class CUser:
 		self.m_jsProfile['point'] -= nPoint
 		self.m_jsProfile['lastUsePointDT'] = lNow
 		self.SaveProfile()
+		return True
 	#}
 #}

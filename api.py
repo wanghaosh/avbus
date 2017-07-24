@@ -74,6 +74,35 @@ def getParam(request, sParamName, sDefaultValue):
 	return sParamValue
 #}
 
+def HttpGet(sUri):
+	# {
+	try:
+		# {
+		resp = urllib2.urlopen(sUri)
+
+		if resp.getcode() != 200:
+			# {
+			print resp.getcode()
+			return None
+		# }
+		return resp.read()
+	# }
+	except:
+		# {
+		info = sys.exc_info()
+		print info
+		return None
+	# }
+
+
+# }
+
+@app.route('/api/warning', methods=['GET'])
+def IWarning():
+#{
+	return HttpGet('http://www.avbus.club/warning.txt')
+#}
+
 @app.route('/api/login', methods=['POST'])
 def ILogin():
 #{

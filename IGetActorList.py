@@ -61,7 +61,8 @@ def getFromRDS(nPageIndex, nPageSize):
 				"id": r[0],
 				"actor": r[1],
 				"alias": r[2],
-				"pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg"%(r[0]),
+				# "pic": "https://s3-ap-southeast-1.amazonaws.com/avbus-data/covers/%d.jpg"%(r[0]),
+				"pic": "https://d1fiy6iq58hkf4.cloudfront.net/covers/%d.jpg"%(r[0]),
 				"programcount": r[3]
 			}
 			# print rec
@@ -125,11 +126,6 @@ def HttpGet(sUri):
 	# }
 # }
 
-def getFromS3():
-#{
-	return HttpGet('https://s3-ap-southeast-1.amazonaws.com/avbus-data/actorlist.json')
-#}
-
 def _IGetActorList(nPageIndex, nPageSize, log):
 	"""
 	interface: get actor list(full)
@@ -151,18 +147,6 @@ def _IGetActorList(nPageIndex, nPageSize, log):
 		log.Info('getactorlist|mem')
 		return json.dumps(jsRet, ensure_ascii=False)
 	#}
-
-	# sRet = getFromS3()
-	# if sRet:
-	# #{
-	# 	mem.Set(sKey, sRet, 3600 * 24)
-    #
-	# 	jsRet = json.loads(sRet)
-	# 	jsRet['mode'] = 's3'
-	# 	log.Info('getactorlist|s3')
-    #
-	# 	return json.dumps(jsRet, ensure_ascii=False)
-	# #}
 
 	sRet = getFromRDS(nPageIndex, nPageSize)
 	if sRet:
